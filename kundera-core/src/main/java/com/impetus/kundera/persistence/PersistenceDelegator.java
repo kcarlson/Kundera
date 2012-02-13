@@ -1139,4 +1139,11 @@ public class PersistenceDelegator
         return client.getReader();
     }
 
+    public Query createNativeQuery(String cqlQuery)
+    {
+        Query query = new QueryResolver().getNativeQueryImplementation(cqlQuery, this, persistenceUnits);
+
+        return query;
+    }
+
 }

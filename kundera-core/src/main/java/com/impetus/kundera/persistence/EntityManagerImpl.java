@@ -225,9 +225,9 @@ public class EntityManagerImpl implements EntityManager
      * @see javax.persistence.EntityManager#createNativeQuery(java.lang.String)
      */
     @Override
-    public final Query createNativeQuery(String sqlString)
+    public final Query createNativeQuery(String cqlString)
     {
-        throw new NotImplementedException("TODO");
+        return persistenceDelegator.createNativeQuery(cqlString);
     }
 
     /* (non-Javadoc)

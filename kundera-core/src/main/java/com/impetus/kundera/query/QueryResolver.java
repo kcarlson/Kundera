@@ -209,4 +209,9 @@ public class QueryResolver
         return query;
 
     }
+
+    public Query getNativeQueryImplementation(String cqlQuery, PersistenceDelegator aThis, String[] persistenceUnits)
+    {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 }

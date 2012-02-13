@@ -45,8 +45,6 @@ import com.impetus.kundera.query.KunderaQuery;
 import com.impetus.kundera.query.KunderaQuery.FilterClause;
 import com.impetus.kundera.query.QueryImpl;
 import com.impetus.kundera.query.exception.QueryHandlerException;
-import com.impetus.client.cassandra.pelops.ByteUtils;
-import java.util.*;
 
 
 /**
@@ -345,7 +343,6 @@ public class CassQuery extends QueryImpl implements Query
     {
         this.maxResult = maxResult;
         return this;
-    }
-    
+    }    
     
 }
