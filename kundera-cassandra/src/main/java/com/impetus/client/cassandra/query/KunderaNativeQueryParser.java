@@ -2,7 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.impetus.kundera.query;
+package com.impetus.client.cassandra.query;
+
+import com.impetus.kundera.query.KunderaJpaQuery;
+import com.impetus.kundera.query.KunderaQuery;
+import com.impetus.kundera.query.KunderaQueryParser;
 
 /**
  *

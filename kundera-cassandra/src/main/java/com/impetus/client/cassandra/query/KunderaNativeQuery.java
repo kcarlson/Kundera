@@ -12,10 +12,11 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  ******************************************************************************/
-package com.impetus.kundera.query;
+package com.impetus.client.cassandra.query;
 
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.query.KunderaJpaQuery.SortOrdering;
+import com.impetus.kundera.query.KunderaQuery;
 import java.util.List;
 import java.util.Queue;
 

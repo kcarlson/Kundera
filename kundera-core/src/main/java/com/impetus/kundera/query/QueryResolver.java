@@ -74,19 +74,13 @@ public class QueryResolver
     
     private Query getQueryImplementation(String query, PersistenceDelegator persistenceDelegator, boolean isNative, String... persistenceUnits)
     {
-        kunderaQuery = getKunderaQuery(isNative, query, persistenceUnits);
-
-        EntityMetadata entityMetadata = kunderaQuery.getEntityMetadata();
-
         String pu = null;
+        
         if (persistenceUnits.length == 1)
         {
             pu = persistenceUnits[0];
         }
-        else
-        {
-            pu = entityMetadata.getPersistenceUnit();
-        }
+        
         if (StringUtils.isEmpty(pu))
         {
             Map<String, PersistenceUnitMetadata> puMetadataMap = KunderaMetadata.INSTANCE.getApplicationMetadata()
@@ -108,6 +102,11 @@ public class QueryResolver
         String kunderaClientName = (String) puMetadata.getProperties().get(PersistenceProperties.KUNDERA_CLIENT);
         ClientType clientType = ClientType.valueOf(kunderaClientName.toUpperCase());
         clientType.setNative(isNative);
+        
+        KunderaQueryFactory kunderaQueryFactory = new KunderaQueryFactory(clientType);
+        
+        kunderaQuery = kunderaQueryFactory.build(query, persistenceUnits);
+        
         
         Query q = null;
 
@@ -183,31 +182,31 @@ public class QueryResolver
         Class clazz = null;
         switch (clientType)
         {
-        case HBASE:
-            clazz = Class.forName("com.impetus.kundera.query.LuceneQuery");
-            break;
-        case MONGODB:
-            clazz = Class.forName("com.impetus.client.mongodb.query.MongoDBQuery");
-            break;
-        case PELOPS:
-            if(clientType.isNative())
-            {
-                clazz = Class.forName("com.impetus.client.cassandra.query.CassNativeQuery");
-            }
-            else
-            {
+            case HBASE:
+                clazz = Class.forName("com.impetus.kundera.query.LuceneQuery");
+                break;
+            case MONGODB:
+                clazz = Class.forName("com.impetus.client.mongodb.query.MongoDBQuery");
+                break;
+            case PELOPS:
+                if(clientType.isNative())
+                {
+                    clazz = Class.forName("com.impetus.client.cassandra.query.CassNativeQuery");
+                }
+                else
+                {
+                    clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
+                }
+                break;
+            case THRIFT:
                 clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
-            }
-            break;
-        case THRIFT:
-            clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
-            break;
-        case RDBMS:
-            clazz = Class.forName("com.impetus.client.rdbms.query.RDBMSQuery");
-            break;
-        default:
-            throw new ClassNotFoundException("Invalid Client type" + clientType);
-            // break;
+                break;
+            case RDBMS:
+                clazz = Class.forName("com.impetus.client.rdbms.query.RDBMSQuery");
+                break;
+            default:
+                throw new ClassNotFoundException("Invalid Client type" + clientType);
+                // break;
         }
 
         @SuppressWarnings("rawtypes")
@@ -219,31 +218,4 @@ public class QueryResolver
 
     }
 
-    /**
-     * TODO: Factory class here?
-     * @param isNative
-     * @param query
-     * @param persistenceUnits
-     * @return 
-     */
-    private KunderaQuery getKunderaQuery(boolean isNative, String query, String... persistenceUnits)
-    {
-        KunderaQuery kQuery;
-        if(isNative)
-        {
-            kQuery = new KunderaNativeQuery(persistenceUnits);
-            KunderaNativeQueryParser parser = new KunderaNativeQueryParser(kQuery, query);
-            parser.parse();
-            kQuery.postParsingInit();
-        }
-        else
-        {
-            kQuery = new KunderaJpaQuery(persistenceUnits);
-            KunderaJpaQueryParser parser = new KunderaJpaQueryParser(kQuery, query);
-            parser.parse();
-            kQuery.postParsingInit();
-        }
-        
-        return kQuery;
-    }
 }
