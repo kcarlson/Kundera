@@ -210,7 +210,7 @@ public class QueryResolver
         }
 
         @SuppressWarnings("rawtypes")
-        Constructor constructor = clazz.getConstructor(String.class, KunderaJpaQuery.class, PersistenceDelegator.class,
+        Constructor constructor = clazz.getConstructor(String.class, KunderaQuery.class, PersistenceDelegator.class,
                 String[].class);
         query = (Query) constructor.newInstance(jpaQuery, kunderaQuery, persistenceDelegator, persistenceUnits);
 

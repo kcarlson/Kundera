@@ -76,7 +76,7 @@ public class KunderaQueryFactory
             @SuppressWarnings("rawtypes")
             Constructor constructor = clazz.getConstructor(String[].class);
 
-            kunderaQuery = (KunderaQuery) constructor.newInstance((Object[]) persistenceUnits);
+            kunderaQuery = (KunderaQuery) constructor.newInstance((Object) persistenceUnits);
         }
         catch (NoSuchMethodException ex)
         {

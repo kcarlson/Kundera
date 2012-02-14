@@ -61,7 +61,7 @@ public abstract class QueryImpl implements Query
     protected String query;
 
     /** The kundera query. */
-    protected KunderaJpaQuery kunderaQuery;
+    protected KunderaQuery kunderaQuery;
 
     /** The persistence delegeator. */
     protected PersistenceDelegator persistenceDelegeator;
@@ -101,7 +101,7 @@ public abstract class QueryImpl implements Query
      * 
      * @return the kunderaQuery
      */
-    public KunderaJpaQuery getKunderaQuery()
+    public KunderaQuery getKunderaQuery()
     {
         return kunderaQuery;
     }

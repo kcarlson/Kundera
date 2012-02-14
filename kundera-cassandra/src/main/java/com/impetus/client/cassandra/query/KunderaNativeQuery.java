@@ -14,7 +14,9 @@
  ******************************************************************************/
 package com.impetus.client.cassandra.query;
 
+import com.impetus.kundera.metadata.KunderaMetadataManager;
 import com.impetus.kundera.metadata.model.EntityMetadata;
+import com.impetus.kundera.metadata.model.MetamodelImpl;
 import com.impetus.kundera.query.KunderaJpaQuery.SortOrdering;
 import com.impetus.kundera.query.KunderaQuery;
 import java.util.List;
@@ -27,13 +29,37 @@ import java.util.Queue;
 public class KunderaNativeQuery implements KunderaQuery
 {
     
-    private final String[] persistenceUnits;
+    private String[] persistenceUnits;
+    private String entityName;
+    private EntityMetadata entityMetadata;
+    private Class<?> entityClass;
 
-    KunderaNativeQuery(String... persistenceUnits)
+    public KunderaNativeQuery(String[] persistenceUnits)
     {
         this.persistenceUnits = persistenceUnits;
     }
+    
+    @Override
+    public void postParsingInit()
+    {
+        MetamodelImpl metamodel = KunderaMetadataManager.getMetamodel(persistenceUnits);
+        
+        Class clazz = metamodel.getEntityClass(entityName);
+        entityMetadata = KunderaMetadataManager.getEntityMetadata(clazz, persistenceUnits);
+        
+        entityClass = getMetamodel().getEntityClass(entityName);
+    }
 
+    /**
+     * Gets the metamodel.
+     * 
+     * @return the metamodel
+     */
+    private MetamodelImpl getMetamodel()
+    {
+        return KunderaMetadataManager.getMetamodel(persistenceUnits);
+    }
+    
     @Override
     public void setGrouping(String groupingClause)
     {
@@ -49,7 +75,7 @@ public class KunderaNativeQuery implements KunderaQuery
     @Override
     public void setFrom(String from)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.entityName = from;
     }
 
     @Override
@@ -73,7 +99,7 @@ public class KunderaNativeQuery implements KunderaQuery
     @Override
     public String getFrom()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return entityName;
     }
 
     @Override
@@ -95,12 +121,6 @@ public class KunderaNativeQuery implements KunderaQuery
     }
 
     @Override
-    public void postParsingInit()
-    {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public void setParameter(String name, String value)
     {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -109,13 +129,13 @@ public class KunderaNativeQuery implements KunderaQuery
     @Override
     public Class getEntityClass()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return entityClass;
     }
 
     @Override
     public EntityMetadata getEntityMetadata()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return entityMetadata;
     }
 
     @Override
@@ -127,13 +147,13 @@ public class KunderaNativeQuery implements KunderaQuery
     @Override
     public String[] getPersistenceUnits()
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return persistenceUnits;
     }
 
     @Override
     public void setPersistenceUnits(String[] persistenceUnits)
     {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.persistenceUnits = persistenceUnits;
     }
     
 }

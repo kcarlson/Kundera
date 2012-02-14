@@ -40,7 +40,7 @@ import com.impetus.kundera.metadata.model.EmbeddedColumn;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.persistence.AbstractEntityReader;
 import com.impetus.kundera.persistence.EntityReader;
-import com.impetus.kundera.query.KunderaQuery.FilterClause;
+import com.impetus.kundera.query.KunderaJpaQuery.FilterClause;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 
 
