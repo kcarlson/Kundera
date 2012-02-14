@@ -363,6 +363,7 @@ public class PelopsClient implements Client
         }
         catch (Exception e)
         {
+            e.printStackTrace();
             throw new PersistenceException(e.getMessage());
         }
         return null;

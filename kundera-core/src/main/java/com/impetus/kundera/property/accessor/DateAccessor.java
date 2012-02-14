@@ -26,6 +26,7 @@ import java.util.Locale;
 import com.impetus.kundera.Constants;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessor;
+import org.scale7.cassandra.pelops.Bytes;
 
 
 /**
@@ -113,6 +114,7 @@ public class DateAccessor implements PropertyAccessor<Date>
         try
         {
             return DATE_FORMATTER.format(((Date) date)).getBytes(Constants.ENCODING);
+            //return Bytes.fromLong(((Date)date).getTime()).toByteArray();
         }
         catch (Exception e)
         {

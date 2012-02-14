@@ -45,6 +45,10 @@ import com.impetus.kundera.query.KunderaQuery;
 import com.impetus.kundera.query.KunderaQuery.FilterClause;
 import com.impetus.kundera.query.QueryImpl;
 import com.impetus.kundera.query.exception.QueryHandlerException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -324,6 +328,18 @@ public class CassQuery extends QueryImpl implements Query
             else if (f.getType().equals(float.class) || f.getType().isAssignableFrom(Float.class))
             {
                 return Bytes.fromFloat(Float.valueOf(value));
+            }
+            else if (f.getType().equals(Date.class) || f.getType().isAssignableFrom(Date.class))
+            {
+                try
+                {
+                    Date date = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy").parse(value);
+                    return Bytes.fromLong(date.getTime());
+                }
+                catch (ParseException ex)
+                {
+                    throw new QueryHandlerException(ex.getMessage());
+                }
             }
             else
             {
