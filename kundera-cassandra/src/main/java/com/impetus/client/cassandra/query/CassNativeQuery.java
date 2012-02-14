@@ -19,7 +19,9 @@ import com.impetus.client.cassandra.pelops.ByteUtils;
 import com.impetus.client.cassandra.pelops.CassandraDataHandler;
 import com.impetus.client.cassandra.pelops.ThriftRow;
 import com.impetus.kundera.client.Client;
+import com.impetus.kundera.metadata.KunderaMetadataManager;
 import com.impetus.kundera.metadata.model.EntityMetadata;
+import com.impetus.kundera.metadata.model.MetamodelImpl;
 import com.impetus.kundera.persistence.EntityReader;
 import com.impetus.kundera.persistence.PersistenceDelegator;
 import com.impetus.kundera.persistence.handler.impl.EntitySaveGraph;
@@ -47,6 +49,7 @@ public class CassNativeQuery extends QueryImpl implements Query
     
     public static Compression defaultCompression = Compression.GZIP;
     private final CassandraDataHandler dataHandler;
+    private final String[] persistenceUnits;
 
     public CassNativeQuery(String query, KunderaQuery kunderaQuery, PersistenceDelegator persistenceDelegator,
             String[] persistenceUnits)
@@ -54,6 +57,7 @@ public class CassNativeQuery extends QueryImpl implements Query
         super(query, persistenceDelegator, persistenceUnits);
         this.kunderaQuery = kunderaQuery;
         this.dataHandler = new CassandraDataHandler();
+        this.persistenceUnits = persistenceUnits;
     }
     
     @Override
@@ -157,8 +161,13 @@ public class CassNativeQuery extends QueryImpl implements Query
             
             Iterator<CqlRow> it = result.getRowsIterator();
             
-            Class clazz = kunderaQuery.getEntityClass();
-            EntityMetadata em = kunderaQuery.getEntityMetadata();
+            String columnFamily = CqlUtils.determineCurrentColumnFamily(query);
+            
+            MetamodelImpl metamodel = KunderaMetadataManager.getMetamodel(persistenceUnits);
+            
+            Class clazz = metamodel.getEntityClass(columnFamily);
+            EntityMetadata em = KunderaMetadataManager.getEntityMetadata(clazz, persistenceUnits);
+            
             
             if(it.hasNext())
             {
@@ -173,7 +182,7 @@ public class CassNativeQuery extends QueryImpl implements Query
                 ThriftRow thriftRow = new ThriftRow(rowKey,
                         client.currentColumnFamily, cqlRow.getColumns(), null);
                 
-                Object entity = dataHandler.fromColumnThriftRow(clazz, em, thriftRow, null, true);
+                Object entity = dataHandler.fromColumnThriftRow(clazz, em, thriftRow, null, false);
                 results.add(entity);
             }
             

@@ -32,6 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.scale7.cassandra.pelops.Bytes;
 import org.scale7.cassandra.pelops.Selector;
+import sun.awt.windows.ThemeReader;
 
 /**
  *
@@ -184,6 +185,13 @@ public class CassandraDataHandler extends DataHandler
             }
 
             String thriftColumnName = PropertyAccessorFactory.STRING.fromBytes(c.getName());
+            
+            // KEY is row key in cql result.
+            if("KEY".equals(thriftColumnName))
+            {
+                continue;
+            }
+            
             byte[] thriftColumnValue = c.getValue();
 
             if (null == thriftColumnValue)
