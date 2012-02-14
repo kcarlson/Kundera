@@ -341,7 +341,7 @@ public class PelopsClient implements Client
         {
             Object entity = entityGraph.getParentEntity();
             String id = entityGraph.getParentId();
-            PelopsDataHandler.ThriftRow tf = populateTfRow(entity, id, metadata);
+            ThriftRow tf = populateTfRow(entity, id, metadata);
 
             if (entityGraph.getRevFKeyName() != null)
             {
@@ -380,7 +380,7 @@ public class PelopsClient implements Client
         String id = entitySaveGraph.getChildId();
         try
         {
-            PelopsDataHandler.ThriftRow tf = populateTfRow(childEntity, id, metadata);
+            ThriftRow tf = populateTfRow(childEntity, id, metadata);
             if (rlName != null)
             {
                 addRelation(entitySaveGraph, metadata, rlName, rlValue, tf);
@@ -574,7 +574,7 @@ public class PelopsClient implements Client
                         superColumns.add(supCol.getSuper_column());
                     }
 
-                    Object r = dataHandler.fromSuperColumnThriftRow(m.getEntityClazz(), m, dataHandler.new ThriftRow(
+                    Object r = dataHandler.fromSuperColumnThriftRow(m.getEntityClazz(), m, new ThriftRow(
                             new String(rowKey), m.getTableName(), null, superColumns), relations, isWrapReq);
                     results.add(r);
                     // List<SuperColumn> superCol = columns.
@@ -587,7 +587,7 @@ public class PelopsClient implements Client
                         cols.add(supCol.getColumn());
                     }
 
-                    Object r = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m, dataHandler.new ThriftRow(
+                    Object r = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m, new ThriftRow(
                             new String(rowKey), m.getTableName(), cols, null), relations, isWrapReq);
                     results.add(r);
                 }
@@ -618,7 +618,7 @@ public class PelopsClient implements Client
             {
                 String rowKeyStr = ByteUtils.bytesToString(rowKey);
                 Object e = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m,
-                        dataHandler.new ThriftRow(rowKeyStr, m.getTableName(), columns, null),
+                        new ThriftRow(rowKeyStr, m.getTableName(), columns, null),
                         relationNames, isRelational);
                 entities.add(e);
             }
@@ -708,7 +708,7 @@ public class PelopsClient implements Client
      * @throws PropertyAccessException the property access exception
      */
     private void addRelation(EntitySaveGraph entitySaveGraph, EntityMetadata m, String rlName, String rlValue,
-            PelopsDataHandler.ThriftRow tf) throws PropertyAccessException
+            ThriftRow tf) throws PropertyAccessException
     {
         if (!entitySaveGraph.isSharedPrimaryKey())
         {
@@ -764,7 +764,7 @@ public class PelopsClient implements Client
      * @throws Exception
      *             the exception
      */
-    private PelopsDataHandler.ThriftRow populateTfRow(Object entity, String id, EntityMetadata metadata)
+    private ThriftRow populateTfRow(Object entity, String id, EntityMetadata metadata)
             throws Exception
     {
 
@@ -776,7 +776,7 @@ public class PelopsClient implements Client
         }
 
         PelopsDataHandler handler = new PelopsDataHandler(this);
-        PelopsDataHandler.ThriftRow tf = handler.toThriftRow(this, entity, id, metadata, columnFamily);
+        ThriftRow tf = handler.toThriftRow(this, entity, id, metadata, columnFamily);
         timestamp = handler.getTimestamp();
         return tf;
     }
@@ -791,7 +791,7 @@ public class PelopsClient implements Client
      * @param tf
      *            the tf
      */
-    private void onPersist(EntityMetadata metadata, Object entity, PelopsDataHandler.ThriftRow tf)
+    private void onPersist(EntityMetadata metadata, Object entity, ThriftRow tf)
     {
         Mutator mutator = Pelops.createMutator(PelopsUtils.generatePoolName(getPersistenceUnit()));
 

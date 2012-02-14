@@ -99,7 +99,7 @@ public class QueryResolver
 
         PersistenceUnitMetadata puMetadata = KunderaMetadataManager.getPersistenceUnitMetadata(pu);
         String kunderaClientName = (String) puMetadata.getProperties().get(PersistenceProperties.KUNDERA_CLIENT);
-        ClientType clientType = ClientType.getValue(kunderaClientName.toUpperCase());
+        ClientType clientType = ClientType.valueOf(kunderaClientName.toUpperCase());
 
         Query query = null;
 
@@ -177,25 +177,26 @@ public class QueryResolver
         {
         case HBASE:
             clazz = Class.forName("com.impetus.kundera.query.LuceneQuery");
-
             break;
         case MONGODB:
             clazz = Class.forName("com.impetus.client.mongodb.query.MongoDBQuery");
             break;
         case PELOPS:
-            clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
-
+            if(clientType.isNative())
+            {
+                clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
+            }
+            else
+            {
+                clazz = Class.forName("com.impetus.client.cassandra.query.CassNativeQuery");
+            }
             break;
         case THRIFT:
             clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
-
             break;
-
         case RDBMS:
             clazz = Class.forName("com.impetus.client.rdbms.query.RDBMSQuery");
-
             break;
-
         default:
             throw new ClassNotFoundException("Invalid Client type" + clientType);
             // break;
@@ -210,8 +211,80 @@ public class QueryResolver
 
     }
 
-    public Query getNativeQueryImplementation(String cqlQuery, PersistenceDelegator aThis, String[] persistenceUnits)
+    public Query getNativeQueryImplementation(String cqlQuery, PersistenceDelegator persistenceDelegator, String... persistenceUnits)
     {
-        throw new UnsupportedOperationException("Not yet implemented");
+        kunderaQuery = new KunderaQuery(persistenceUnits);
+
+        EntityMetadata entityMetadata = kunderaQuery.getEntityMetadata();
+
+        String pu = null;
+        if (persistenceUnits.length == 1)
+        {
+            pu = persistenceUnits[0];
+        }
+        else
+        {
+            pu = entityMetadata.getPersistenceUnit();
+        }
+        if (StringUtils.isEmpty(pu))
+        {
+            Map<String, PersistenceUnitMetadata> puMetadataMap = KunderaMetadata.INSTANCE.getApplicationMetadata()
+                    .getPersistenceUnitMetadataMap();
+            for (PersistenceUnitMetadata puMetadata : puMetadataMap.values())
+            {
+                Properties props = puMetadata.getProperties();
+                String clientName = props.getProperty(PersistenceProperties.KUNDERA_CLIENT);
+                if (ClientType.RDBMS.name().equalsIgnoreCase(clientName))
+                {
+                    pu = puMetadata.getPersistenceUnitName();
+                    break;
+                }
+
+            }
+        }
+
+        PersistenceUnitMetadata puMetadata = KunderaMetadataManager.getPersistenceUnitMetadata(pu);
+        
+        String kunderaClientName = ((String) puMetadata.getProperties().get(PersistenceProperties.KUNDERA_CLIENT));
+        
+        ClientType clientType = ClientType.valueOf(kunderaClientName.toUpperCase());
+        clientType.setNative(true);
+        
+        Query query = null;
+
+        try
+        {
+            query = getQuery(clientType, cqlQuery, persistenceDelegator, persistenceUnits);
+        }
+        catch (SecurityException e)
+        {
+            log.error(e.getMessage());
+        }
+        catch (IllegalArgumentException e)
+        {
+            log.error(e.getMessage());
+        }
+        catch (ClassNotFoundException e)
+        {
+            log.error(e.getMessage());
+        }
+        catch (NoSuchMethodException e)
+        {
+            log.error(e.getMessage());
+        }
+        catch (InstantiationException e)
+        {
+            log.error(e.getMessage());
+        }
+        catch (IllegalAccessException e)
+        {
+            log.error(e.getMessage());
+        }
+        catch (InvocationTargetException e)
+        {
+            log.error(e.getMessage());
+        }
+
+        return query;
     }
 }

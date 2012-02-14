@@ -52,6 +52,8 @@ public class PelopsClientFactory extends GenericClientFactory
 
     /** The reader. */
     private EntityReader reader;
+    
+    public static String POOL_NAME;
 
     /* (non-Javadoc)
      * @see com.impetus.kundera.loader.GenericClientFactory#initializeClient()
@@ -92,9 +94,9 @@ public class PelopsClientFactory extends GenericClientFactory
         String contactNodes = (String) props.get(PersistenceProperties.KUNDERA_NODES);
         String defaultPort = (String) props.get(PersistenceProperties.KUNDERA_PORT);
         String keyspace = (String) props.get(PersistenceProperties.KUNDERA_KEYSPACE);
-        String poolName = PelopsUtils.generatePoolName(getPersistenceUnit());
+        POOL_NAME = PelopsUtils.generatePoolName(getPersistenceUnit());
 
-        if (Pelops.getDbConnPool(poolName) == null)
+        if (Pelops.getDbConnPool(POOL_NAME) == null)
         {
             Cluster cluster = new Cluster(contactNodes,
                     new IConnection.Config(Integer.parseInt(defaultPort), true, -1), false);
@@ -103,7 +105,7 @@ public class PelopsClientFactory extends GenericClientFactory
 
             // Add pool with specified policy. null means default operand
             // policy.
-            Pelops.addPool(poolName, cluster, keyspace, policy, null);
+            Pelops.addPool(POOL_NAME, cluster, keyspace, policy, null);
 
         }
         // TODO return a thrift pool

@@ -64,7 +64,7 @@ public final class ClientResolver
                 .getPersistenceUnitMetadata(persistenceUnit);
         String kunderaClientName = (String) persistenceUnitMetadata.getProperties().get(
                 PersistenceProperties.KUNDERA_CLIENT);
-        ClientType clientType = ClientType.getValue(kunderaClientName.toUpperCase());
+        ClientType clientType = ClientType.valueOf(kunderaClientName.toUpperCase());
 
         try
         {

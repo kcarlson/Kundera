@@ -15,9 +15,6 @@
  ******************************************************************************/
 package com.impetus.kundera.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 /**
  * The Enum ClientType.
@@ -29,42 +26,33 @@ public enum ClientType
     
     /** The HBASE. */
     HBASE, 
- /** The PELOPS. */
- PELOPS, 
- /** The MONGODB. */
- MONGODB, 
- /** The THRIFT. */
- THRIFT, 
- /** The RDBMS. */
- RDBMS;
+    /** The PELOPS. */
+    PELOPS,
+    /** The MONGODB. */
+    MONGODB, 
+    /** The THRIFT. */
+    THRIFT, 
+    /** The RDBMS. */
+    RDBMS;
     
-    /** The coll. */
-    static Map<String, ClientType> coll = new HashMap<String, ClientType>();
-
     /**
-     * Static initialisation.
+     * Default is false;
      */
-    static
+    private Boolean isNative;
+    
+    ClientType()
     {
-        coll.put(HBASE.name(), HBASE);
-        coll.put(PELOPS.name(), PELOPS);
-        coll.put(THRIFT.name(), THRIFT);
-        coll.put(MONGODB.name(), MONGODB);
-        coll.put(RDBMS.name(), RDBMS);
+        this.isNative = false;
+    }
+    
+    public Boolean isNative()
+    {
+        return isNative;
     }
 
-    /**
-     * Returns value of clientType.
-     *
-     * @param clientType client type
-     * @return clientType enum value.
-     */
-    public static ClientType getValue(String clientType)
+    public void setNative(Boolean isNative)
     {
-        if (clientType == null)
-        {
-            throw new EnumConstantNotPresentException(null, clientType);
-        }
-        return coll.get(clientType);
+        this.isNative = isNative;
     }
+    
 }
