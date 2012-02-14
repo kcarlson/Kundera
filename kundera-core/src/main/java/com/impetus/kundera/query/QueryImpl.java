@@ -45,7 +45,7 @@ import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.persistence.EntityReader;
 import com.impetus.kundera.persistence.PersistenceDelegator;
 import com.impetus.kundera.persistence.handler.impl.EntitySaveGraph;
-import com.impetus.kundera.query.KunderaQuery.FilterClause;
+import com.impetus.kundera.query.KunderaJpaQuery.FilterClause;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 
 
@@ -61,7 +61,7 @@ public abstract class QueryImpl implements Query
     protected String query;
 
     /** The kundera query. */
-    protected KunderaQuery kunderaQuery;
+    protected KunderaJpaQuery kunderaQuery;
 
     /** The persistence delegeator. */
     protected PersistenceDelegator persistenceDelegeator;
@@ -101,7 +101,7 @@ public abstract class QueryImpl implements Query
      * 
      * @return the kunderaQuery
      */
-    public KunderaQuery getKunderaQuery()
+    public KunderaJpaQuery getKunderaQuery()
     {
         return kunderaQuery;
     }
@@ -112,7 +112,7 @@ public abstract class QueryImpl implements Query
      * @param kunderaQuery
      *            the kunderaQuery to set
      */
-    public void setKunderaQuery(KunderaQuery kunderaQuery)
+    public void setKunderaQuery(KunderaJpaQuery kunderaQuery)
     {
         this.kunderaQuery = kunderaQuery;
     }

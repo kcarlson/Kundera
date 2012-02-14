@@ -25,7 +25,7 @@ import com.impetus.kundera.metadata.model.MetamodelImpl;
 import com.impetus.kundera.persistence.EntityReader;
 import com.impetus.kundera.persistence.PersistenceDelegator;
 import com.impetus.kundera.persistence.handler.impl.EntitySaveGraph;
-import com.impetus.kundera.query.KunderaQuery;
+import com.impetus.kundera.query.KunderaJpaQuery;
 import com.impetus.kundera.query.QueryImpl;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -51,7 +51,7 @@ public class CassNativeQuery extends QueryImpl implements Query
     private final CassandraDataHandler dataHandler;
     private final String[] persistenceUnits;
 
-    public CassNativeQuery(String query, KunderaQuery kunderaQuery, PersistenceDelegator persistenceDelegator,
+    public CassNativeQuery(String query, KunderaJpaQuery kunderaQuery, PersistenceDelegator persistenceDelegator,
             String[] persistenceUnits)
     {
         super(query, persistenceDelegator, persistenceUnits);

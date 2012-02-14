@@ -23,10 +23,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.impetus.kundera.query.KunderaQuery;
-import com.impetus.kundera.query.KunderaQuery.SortOrder;
-import com.impetus.kundera.query.KunderaQuery.SortOrdering;
-import com.impetus.kundera.query.KunderaQueryParser;
+import com.impetus.kundera.query.KunderaJpaQuery;
+import com.impetus.kundera.query.KunderaJpaQuery.SortOrder;
+import com.impetus.kundera.query.KunderaJpaQuery.SortOrdering;
+import com.impetus.kundera.query.KunderaJpaQueryParser;
 import com.impetus.kundera.query.KunderaQueryParserException;
 
 
@@ -54,12 +54,12 @@ public class KunderaQueryParserTest
     @Test
     public void onQueryParse()
     {
-        KunderaQuery kunderQuery = new KunderaQuery("rdbms");
+        KunderaJpaQuery kunderQuery = new KunderaJpaQuery("rdbms");
 
         // Valid Query with clause.
         String validQuery = "SELECT c FROM Country c ORDER BY c.currency, c.population DESC";
 
-        KunderaQueryParser parser = new KunderaQueryParser(kunderQuery, validQuery);
+        KunderaJpaQueryParser parser = new KunderaJpaQueryParser(kunderQuery, validQuery);
         parser.parse();
 
         List<SortOrdering> sortOrders = kunderQuery.getOrdering();
@@ -73,7 +73,7 @@ public class KunderaQueryParserTest
         // valid query with default ASC clause.
         String validQueryWithDefaultClause = "SELECT c FROM Country c ORDER BY c.currency, c.population";
 
-        parser = new KunderaQueryParser(kunderQuery, validQueryWithDefaultClause);
+        parser = new KunderaJpaQueryParser(kunderQuery, validQueryWithDefaultClause);
         parser.parse();
 
         sortOrders = kunderQuery.getOrdering();
@@ -88,7 +88,7 @@ public class KunderaQueryParserTest
 
         try
         {
-            parser = new KunderaQueryParser(kunderQuery, validQueryWithDefaultClause);
+            parser = new KunderaJpaQueryParser(kunderQuery, validQueryWithDefaultClause);
             parser.parse();
         }
         catch (KunderaQueryParserException e)

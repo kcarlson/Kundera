@@ -60,7 +60,7 @@ public class LuceneQuery extends QueryImpl implements Query
      * @param pd the pd
      * @param persistenceUnits the persistence units
      */
-    public LuceneQuery(String jpaQuery, KunderaQuery kunderaQuery, PersistenceDelegator pd, String... persistenceUnits)
+    public LuceneQuery(String jpaQuery, KunderaJpaQuery kunderaQuery, PersistenceDelegator pd, String... persistenceUnits)
     {
         super(jpaQuery, pd, persistenceUnits);
         this.kunderaQuery = kunderaQuery;

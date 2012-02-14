@@ -41,8 +41,8 @@ import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.persistence.EntityReader;
 import com.impetus.kundera.persistence.PersistenceDelegator;
 import com.impetus.kundera.persistence.handler.impl.EntitySaveGraph;
-import com.impetus.kundera.query.KunderaQuery;
-import com.impetus.kundera.query.KunderaQuery.FilterClause;
+import com.impetus.kundera.query.KunderaJpaQuery;
+import com.impetus.kundera.query.KunderaJpaQuery.FilterClause;
 import com.impetus.kundera.query.QueryImpl;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 import java.text.DateFormat;
@@ -79,7 +79,7 @@ public class CassQuery extends QueryImpl implements Query
      * @param persistenceUnits
      *            the persistence units
      */
-    public CassQuery(String query, KunderaQuery kunderaQuery, PersistenceDelegator persistenceDelegator,
+    public CassQuery(String query, KunderaJpaQuery kunderaQuery, PersistenceDelegator persistenceDelegator,
             String[] persistenceUnits)
     {
         super(query, persistenceDelegator, persistenceUnits);

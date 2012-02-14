@@ -74,13 +74,7 @@ public class QueryResolver
     
     private Query getQueryImplementation(String query, PersistenceDelegator persistenceDelegator, boolean isNative, String... persistenceUnits)
     {
-        kunderaQuery = new KunderaQuery(persistenceUnits);
-        KunderaQueryParser parser = new KunderaQueryParser(kunderaQuery, query);
-        if(!isNative)
-        {
-            parser.parse();
-            kunderaQuery.postParsingInit();
-        }
+        kunderaQuery = getKunderaQuery(isNative, query, persistenceUnits);
 
         EntityMetadata entityMetadata = kunderaQuery.getEntityMetadata();
 
@@ -217,11 +211,39 @@ public class QueryResolver
         }
 
         @SuppressWarnings("rawtypes")
-        Constructor constructor = clazz.getConstructor(String.class, KunderaQuery.class, PersistenceDelegator.class,
+        Constructor constructor = clazz.getConstructor(String.class, KunderaJpaQuery.class, PersistenceDelegator.class,
                 String[].class);
         query = (Query) constructor.newInstance(jpaQuery, kunderaQuery, persistenceDelegator, persistenceUnits);
 
         return query;
 
+    }
+
+    /**
+     * TODO: Factory class here?
+     * @param isNative
+     * @param query
+     * @param persistenceUnits
+     * @return 
+     */
+    private KunderaQuery getKunderaQuery(boolean isNative, String query, String... persistenceUnits)
+    {
+        KunderaQuery kQuery;
+        if(isNative)
+        {
+            kQuery = new KunderaNativeQuery(persistenceUnits);
+            KunderaNativeQueryParser parser = new KunderaNativeQueryParser(kQuery, query);
+            parser.parse();
+            kQuery.postParsingInit();
+        }
+        else
+        {
+            kQuery = new KunderaJpaQuery(persistenceUnits);
+            KunderaJpaQueryParser parser = new KunderaJpaQueryParser(kQuery, query);
+            parser.parse();
+            kQuery.postParsingInit();
+        }
+        
+        return kQuery;
     }
 }
