@@ -42,13 +42,21 @@ public class CassNativeQuery extends QueryImpl implements Query
 {
 
     private static Log log = LogFactory.getLog(CassNativeQuery.class);
+
     private EntityReader reader;
+
     private int maxResult = 10000;
+
     public static Compression defaultCompression = Compression.GZIP;
+
     private final CassandraDataHandler dataHandler;
+
     private final String[] persistenceUnits;
+
     private List currentResultList;
+
     private int updateCount;
+
     private String currentColumnFamily;
 
     public CassNativeQuery(String query, KunderaQuery kunderaQuery, PersistenceDelegator persistenceDelegator,
@@ -85,7 +93,8 @@ public class CassNativeQuery extends QueryImpl implements Query
     }
 
     @Override
-    protected List<Object> handleAssociations(EntityMetadata m, Client client, List<EntitySaveGraph> graphs, List<String> relationNames, boolean isParent)
+    protected List<Object> handleAssociations(EntityMetadata m, Client client, List<EntitySaveGraph> graphs,
+            List<String> relationNames, boolean isParent)
     {
         /*
          * log.debug("on handleAssociations cassandra query"); Map<Boolean,
@@ -145,8 +154,7 @@ public class CassNativeQuery extends QueryImpl implements Query
     {
         doExecute();
 
-        return currentResultList != null
-                && !currentResultList.isEmpty() ? currentResultList : null;
+        return currentResultList != null && !currentResultList.isEmpty() ? currentResultList : null;
     }
 
     private void doExecute()
@@ -160,15 +168,15 @@ public class CassNativeQuery extends QueryImpl implements Query
 
             switch (result.getType())
             {
-                case ROWS:
-                    populateCurrentResultList(result);
-                    break;
-                case INT:
-                    updateCount = result.getNum();
-                    break;
-                case VOID:
-                    updateCount = 0;
-                    break;
+            case ROWS:
+                populateCurrentResultList(result);
+                break;
+            case INT:
+                updateCount = result.getNum();
+                break;
+            case VOID:
+                updateCount = 0;
+                break;
             }
 
             /*
@@ -205,7 +213,8 @@ public class CassNativeQuery extends QueryImpl implements Query
              *
              */
 
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             log.fatal(null, ex);
         }
@@ -225,13 +234,10 @@ public class CassNativeQuery extends QueryImpl implements Query
                 CqlRow cqlRow = it.next();
                 String rowKey = ByteUtils.byteArrayToString(cqlRow.getKey());
 
-                ThriftRow thriftRow = new ThriftRow(rowKey,
-                        currentColumnFamily, cqlRow.getColumns(), null);
+                ThriftRow thriftRow = new ThriftRow(rowKey, currentColumnFamily, cqlRow.getColumns(), null);
 
-                Object entity = dataHandler.fromColumnThriftRow(
-                        kunderaQuery.getEntityClass(),
-                        kunderaQuery.getEntityMetadata(),
-                        thriftRow, null, false);
+                Object entity = dataHandler.fromColumnThriftRow(kunderaQuery.getEntityClass(), kunderaQuery
+                        .getEntityMetadata(), thriftRow, null, false);
 
                 currentResultList.add(entity);
 

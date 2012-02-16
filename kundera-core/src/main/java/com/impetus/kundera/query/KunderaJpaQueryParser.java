@@ -17,7 +17,6 @@ package com.impetus.kundera.query;
 
 import java.util.StringTokenizer;
 
-
 /**
  * Parser for handling JPQL Single-String queries. Takes a JPQLQuery and the
  * query string and parses it into its constituent parts, updating the JPQLQuery
@@ -61,7 +60,7 @@ public class KunderaJpaQueryParser implements KunderaQueryParser
      */
     public KunderaJpaQueryParser(KunderaQuery query, String queryString)
     {
-        this.query = (KunderaJpaQuery)query;
+        this.query = (KunderaJpaQuery) query;
         this.queryString = queryString;
     }
 

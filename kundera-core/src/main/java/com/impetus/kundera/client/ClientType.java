@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.impetus.kundera.client;
 
-
 /**
  * The Enum ClientType.
  *
@@ -23,28 +22,28 @@ package com.impetus.kundera.client;
  */
 public enum ClientType
 {
-    
+
     /** The HBASE. */
-    HBASE, 
+    HBASE,
     /** The PELOPS. */
     PELOPS,
     /** The MONGODB. */
-    MONGODB, 
+    MONGODB,
     /** The THRIFT. */
-    THRIFT, 
+    THRIFT,
     /** The RDBMS. */
     RDBMS;
-    
+
     /**
      * Default is false;
      */
     private Boolean isNative;
-    
+
     ClientType()
     {
         this.isNative = false;
     }
-    
+
     public Boolean isNative()
     {
         return isNative;
@@ -54,5 +53,5 @@ public enum ClientType
     {
         this.isNative = isNative;
     }
-    
+
 }

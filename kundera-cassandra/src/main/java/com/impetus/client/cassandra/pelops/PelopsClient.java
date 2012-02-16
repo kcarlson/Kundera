@@ -55,7 +55,6 @@ import com.impetus.kundera.property.PropertyAccessorFactory;
 import com.impetus.kundera.property.PropertyAccessorHelper;
 import com.impetus.kundera.proxy.EnhancedEntity;
 
-
 /**
  * Client implementation using Pelops. http://code.google.com/p/pelops/
  * 
@@ -137,8 +136,8 @@ public class PelopsClient implements Client
         List<Object> result = null;
         try
         {
-            result = (List<Object>) find(clazz, relationNames, relationNames != null, metadata,
-                    rowId != null ? rowId.toString() : null);
+            result = (List<Object>) find(clazz, relationNames, relationNames != null, metadata, rowId != null ? rowId
+                    .toString() : null);
         }
         catch (Exception e)
         {
@@ -216,9 +215,9 @@ public class PelopsClient implements Client
         for (String superColumnName : superColumnMap.keySet())
         {
             String entityId = superColumnMap.get(superColumnName);
-            List<SuperColumn> superColumnList = loadSuperColumns(entityMetadata.getSchema(),
-                    entityMetadata.getTableName(), entityId,
-                    new String[] { superColumnName.substring(0, superColumnName.indexOf("|")) });
+            List<SuperColumn> superColumnList = loadSuperColumns(entityMetadata.getSchema(), entityMetadata
+                    .getTableName(), entityId, new String[] { superColumnName
+                    .substring(0, superColumnName.indexOf("|")) });
             E e = (E) dataHandler.fromThriftRow(entityMetadata.getEntityClazz(), entityMetadata,
                     new DataRow<SuperColumn>(entityId, entityMetadata.getTableName(), superColumnList));
             entities.add(e);
@@ -427,8 +426,8 @@ public class PelopsClient implements Client
             addColumnsToJoinTable(inverseJoinColumnName, relMetadata, columns, childEntity);
         }
 
-        mutator.writeColumns(joinTableName, new Bytes(parentId.getBytes()),
-                Arrays.asList(columns.toArray(new Column[0])));
+        mutator.writeColumns(joinTableName, new Bytes(parentId.getBytes()), Arrays.asList(columns
+                .toArray(new Column[0])));
         mutator.execute(ConsistencyLevel.ONE);
     }
 
@@ -441,8 +440,8 @@ public class PelopsClient implements Client
     {
         String parentId = objectGraph.getParentId();
         Selector selector = Pelops.createSelector(PelopsUtils.generatePoolName(getPersistenceUnit()));
-        List<Column> columns = selector.getColumnsFromRow(joinTableName, new Bytes(parentId.getBytes()),
-                Selector.newColumnsPredicateAll(true, 10), ConsistencyLevel.ONE);
+        List<Column> columns = selector.getColumnsFromRow(joinTableName, new Bytes(parentId.getBytes()), Selector
+                .newColumnsPredicateAll(true, 10), ConsistencyLevel.ONE);
 
         PelopsDataHandler handler = new PelopsDataHandler(this);
         List<E> foreignKeys = handler.getForeignKeysFromJoinTable(inverseJoinColumnName, columns);
@@ -513,8 +512,8 @@ public class PelopsClient implements Client
         List<Object> entities = null;
         if (ixClause.isEmpty())
         {
-            Map<Bytes, List<Column>> qResults = selector.getColumnsFromRows(m.getTableName(),
-                    selector.newKeyRange("", "", 100), slicePredicate, ConsistencyLevel.ONE);
+            Map<Bytes, List<Column>> qResults = selector.getColumnsFromRows(m.getTableName(), selector.newKeyRange("",
+                    "", 100), slicePredicate, ConsistencyLevel.ONE);
             entities = new ArrayList<Object>(qResults.size());
             populateData(m, qResults, entities, isRelation, relations);
         }
@@ -551,9 +550,8 @@ public class PelopsClient implements Client
         SlicePredicate slicePredicate = Selector.newColumnsPredicateAll(false, Integer.MAX_VALUE);
         List<Object> entities = null;
 
-        List<KeySlice> keys = selector.getKeySlices(new ColumnParent(m.getTableName()),
-                selector.newKeyRange(Bytes.fromByteArray(minVal), Bytes.fromByteArray(maxVal), 10000), slicePredicate,
-                ConsistencyLevel.ONE);
+        List<KeySlice> keys = selector.getKeySlices(new ColumnParent(m.getTableName()), selector.newKeyRange(Bytes
+                .fromByteArray(minVal), Bytes.fromByteArray(maxVal), 10000), slicePredicate, ConsistencyLevel.ONE);
 
         List<String> superColumnNames = m.getEmbeddedColumnFieldNames();
 
@@ -575,8 +573,8 @@ public class PelopsClient implements Client
                         superColumns.add(supCol.getSuper_column());
                     }
 
-                    Object r = dataHandler.fromSuperColumnThriftRow(m.getEntityClazz(), m, new ThriftRow(
-                            new String(rowKey), m.getTableName(), null, superColumns), relations, isWrapReq);
+                    Object r = dataHandler.fromSuperColumnThriftRow(m.getEntityClazz(), m, new ThriftRow(new String(
+                            rowKey), m.getTableName(), null, superColumns), relations, isWrapReq);
                     results.add(r);
                     // List<SuperColumn> superCol = columns.
                 }
@@ -588,8 +586,8 @@ public class PelopsClient implements Client
                         cols.add(supCol.getColumn());
                     }
 
-                    Object r = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m, new ThriftRow(
-                            new String(rowKey), m.getTableName(), cols, null), relations, isWrapReq);
+                    Object r = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m, new ThriftRow(new String(rowKey),
+                            m.getTableName(), cols, null), relations, isWrapReq);
                     results.add(r);
                 }
             }
@@ -618,9 +616,8 @@ public class PelopsClient implements Client
             try
             {
                 String rowKeyStr = ByteUtils.bytesToString(rowKey);
-                Object e = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m,
-                        new ThriftRow(rowKeyStr, m.getTableName(), columns, null),
-                        relationNames, isRelational);
+                Object e = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m, new ThriftRow(rowKeyStr, m
+                        .getTableName(), columns, null), relationNames, isRelational);
                 entities.add(e);
             }
             catch (IllegalStateException e)
@@ -649,8 +646,8 @@ public class PelopsClient implements Client
         SlicePredicate slicePredicate = Selector.newColumnsPredicateAll(false, 10000);
         List<Object> entities = null;
         Bytes bytes = ByteUtils.stringToBytes(colValue);
-        IndexClause ix = Selector.newIndexClause(Bytes.EMPTY, 10000,
-                Selector.newIndexExpression(colName, IndexOperator.EQ, bytes));
+        IndexClause ix = Selector.newIndexClause(Bytes.EMPTY, 10000, Selector.newIndexExpression(colName,
+                IndexOperator.EQ, bytes));
         Map<Bytes, List<Column>> qResults = selector.getIndexedColumns(m.getTableName(), ix, slicePredicate,
                 ConsistencyLevel.ONE);
         entities = new ArrayList<Object>(qResults.size());
@@ -765,8 +762,7 @@ public class PelopsClient implements Client
      * @throws Exception
      *             the exception
      */
-    private ThriftRow populateTfRow(Object entity, String id, EntityMetadata metadata)
-            throws Exception
+    private ThriftRow populateTfRow(Object entity, String id, EntityMetadata metadata) throws Exception
     {
 
         String columnFamily = metadata.getTableName();
@@ -801,8 +797,8 @@ public class PelopsClient implements Client
         if (thriftColumns != null && !thriftColumns.isEmpty())
         {
             Bytes keyBytes = ByteUtils.stringToBytes(tf.getId());
-            mutator.writeColumns(metadata.getTableName(), keyBytes,
-                    Arrays.asList(tf.getColumns().toArray(new Column[0])));
+            mutator.writeColumns(metadata.getTableName(), keyBytes, Arrays.asList(tf.getColumns()
+                    .toArray(new Column[0])));
         }
 
         if (thriftSuperColumns != null && !thriftSuperColumns.isEmpty())

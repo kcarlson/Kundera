@@ -34,7 +34,6 @@ import com.impetus.kundera.metadata.model.KunderaMetadata;
 import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 import com.impetus.kundera.persistence.PersistenceDelegator;
 
-
 /**
  * The Class QueryResolver.
  * 
@@ -50,11 +49,12 @@ public class QueryResolver
     /** The kundera query. */
     KunderaQuery kunderaQuery;
 
-    public Query getNativeQueryImplementation(String cqlQuery, PersistenceDelegator persistenceDelegator, String... persistenceUnits)
+    public Query getNativeQueryImplementation(String cqlQuery, PersistenceDelegator persistenceDelegator,
+            String... persistenceUnits)
     {
         return getQueryImplementation(cqlQuery, persistenceDelegator, true, persistenceUnits);
     }
-    
+
     /**
      * Gets the query implementation.
      * 
@@ -71,16 +71,17 @@ public class QueryResolver
     {
         return getQueryImplementation(jpaQuery, persistenceDelegator, false, persistenceUnits);
     }
-    
-    private Query getQueryImplementation(String query, PersistenceDelegator persistenceDelegator, boolean isNative, String... persistenceUnits)
+
+    private Query getQueryImplementation(String query, PersistenceDelegator persistenceDelegator, boolean isNative,
+            String... persistenceUnits)
     {
         String pu = null;
-        
+
         if (persistenceUnits.length == 1)
         {
             pu = persistenceUnits[0];
         }
-        
+
         if (StringUtils.isEmpty(pu))
         {
             Map<String, PersistenceUnitMetadata> puMetadataMap = KunderaMetadata.INSTANCE.getApplicationMetadata()
@@ -102,12 +103,11 @@ public class QueryResolver
         String kunderaClientName = (String) puMetadata.getProperties().get(PersistenceProperties.KUNDERA_CLIENT);
         ClientType clientType = ClientType.valueOf(kunderaClientName.toUpperCase());
         clientType.setNative(isNative);
-        
+
         KunderaQueryFactory kunderaQueryFactory = new KunderaQueryFactory(clientType);
-        
+
         kunderaQuery = kunderaQueryFactory.build(query, persistenceUnits);
-        
-        
+
         Query q = null;
 
         try
@@ -182,31 +182,31 @@ public class QueryResolver
         Class clazz = null;
         switch (clientType)
         {
-            case HBASE:
-                clazz = Class.forName("com.impetus.kundera.query.LuceneQuery");
-                break;
-            case MONGODB:
-                clazz = Class.forName("com.impetus.client.mongodb.query.MongoDBQuery");
-                break;
-            case PELOPS:
-                if(clientType.isNative())
-                {
-                    clazz = Class.forName("com.impetus.client.cassandra.query.CassNativeQuery");
-                }
-                else
-                {
-                    clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
-                }
-                break;
-            case THRIFT:
+        case HBASE:
+            clazz = Class.forName("com.impetus.kundera.query.LuceneQuery");
+            break;
+        case MONGODB:
+            clazz = Class.forName("com.impetus.client.mongodb.query.MongoDBQuery");
+            break;
+        case PELOPS:
+            if (clientType.isNative())
+            {
+                clazz = Class.forName("com.impetus.client.cassandra.query.CassNativeQuery");
+            }
+            else
+            {
                 clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
-                break;
-            case RDBMS:
-                clazz = Class.forName("com.impetus.client.rdbms.query.RDBMSQuery");
-                break;
-            default:
-                throw new ClassNotFoundException("Invalid Client type" + clientType);
-                // break;
+            }
+            break;
+        case THRIFT:
+            clazz = Class.forName("com.impetus.client.cassandra.query.CassQuery");
+            break;
+        case RDBMS:
+            clazz = Class.forName("com.impetus.client.rdbms.query.RDBMSQuery");
+            break;
+        default:
+            throw new ClassNotFoundException("Invalid Client type" + clientType);
+            // break;
         }
 
         @SuppressWarnings("rawtypes")

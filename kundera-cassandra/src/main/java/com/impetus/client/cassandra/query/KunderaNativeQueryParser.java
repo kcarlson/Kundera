@@ -24,6 +24,7 @@ import com.impetus.kundera.query.KunderaQueryParser;
 public class KunderaNativeQueryParser implements KunderaQueryParser
 {
     private KunderaNativeQuery query;
+
     private String queryString;
 
     /**
@@ -36,15 +37,15 @@ public class KunderaNativeQueryParser implements KunderaQueryParser
      */
     public KunderaNativeQueryParser(KunderaQuery query, String queryString)
     {
-        this.query = (KunderaNativeQuery)query;
+        this.query = (KunderaNativeQuery) query;
         this.queryString = queryString;
     }
-    
+
     @Override
     public void parse()
     {
         String columnFamily = CqlUtils.determineCurrentColumnFamily(queryString);
         query.setFrom(columnFamily);
     }
-    
+
 }
