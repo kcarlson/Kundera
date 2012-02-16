@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Queue;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.query.KunderaJpaQuery.SortOrdering;
+import java.util.Set;
+import javax.persistence.Parameter;
 
 
 /**
@@ -156,5 +158,11 @@ public interface KunderaQuery
      *            the persistenceUnits to set
      */
     public void setPersistenceUnits(String[] persistenceUnits);
+
+    public Set<Parameter<?>> getParameters();
+
+    public Parameter<?> getParameter(String paramString);
+
+    public Object getParameterValue(String paramString);
 
 }

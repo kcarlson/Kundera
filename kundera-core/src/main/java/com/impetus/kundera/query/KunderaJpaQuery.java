@@ -33,6 +33,8 @@ import org.slf4j.LoggerFactory;
 import com.impetus.kundera.metadata.KunderaMetadataManager;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.metadata.model.MetamodelImpl;
+import java.util.*;
+import javax.persistence.Parameter;
 
 
 /**
@@ -93,6 +95,8 @@ public class KunderaJpaQuery implements KunderaQuery
     // (AND, OR etc.)
     /** The filters queue. */
     private Queue filtersQueue = new LinkedList();
+    
+    private Map<Parameter<?>,Object> parameters;
 
     /**
      * Instantiates a new kundera query.
@@ -204,7 +208,7 @@ public class KunderaJpaQuery implements KunderaQuery
      * @return the result
      */
     @Override
-    public final String getResult()
+    public String getResult()
     {
         return result;
     }
@@ -351,8 +355,13 @@ public class KunderaJpaQuery implements KunderaQuery
      *            the value
      */
     @Override
-    public final void setParameter(String name, String value)
+    public void setParameter(String name, String value)
     {
+        if(parameters == null)
+        {
+            parameters = new HashMap<Parameter<?>,Object>(4);
+        }
+        parameters.put(new KunderaParameter(name), value);
         boolean found = false;
         for (Object object : getFilterClauseQueue())
         {
@@ -405,6 +414,24 @@ public class KunderaJpaQuery implements KunderaQuery
     public final Queue getFilterClauseQueue()
     {
         return filtersQueue;
+    }
+
+    @Override
+    public Set<Parameter<?>> getParameters()
+    {
+        return parameters == null ? new HashSet<Parameter<?>>(0) : parameters.keySet();
+    }
+
+    @Override
+    public Parameter<?> getParameter(String paramString)
+    {
+        return new KunderaParameter(paramString);
+    }
+
+    @Override
+    public Object getParameterValue(String paramString)
+    {
+        return parameters == null ? null : parameters.get(getParameter(paramString));
     }
 
     // class to keep hold of a where clause predicate

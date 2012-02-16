@@ -21,6 +21,8 @@ import com.impetus.kundera.query.KunderaJpaQuery.SortOrdering;
 import com.impetus.kundera.query.KunderaQuery;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
+import javax.persistence.Parameter;
 
 /**
  *
@@ -154,6 +156,24 @@ public class KunderaNativeQuery implements KunderaQuery
     public void setPersistenceUnits(String[] persistenceUnits)
     {
         this.persistenceUnits = persistenceUnits;
+    }
+
+    @Override
+    public Set<Parameter<?>> getParameters()
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Parameter<?> getParameter(String paramString)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Object getParameterValue(String paramString)
+    {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }
