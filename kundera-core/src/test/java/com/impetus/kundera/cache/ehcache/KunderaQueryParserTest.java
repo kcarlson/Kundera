@@ -29,7 +29,6 @@ import com.impetus.kundera.query.KunderaJpaQuery.SortOrdering;
 import com.impetus.kundera.query.KunderaJpaQueryParser;
 import com.impetus.kundera.query.KunderaQueryParserException;
 
-
 /**
  * The Class KunderaQueryParserTest.
  *

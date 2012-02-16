@@ -27,6 +27,7 @@ public class KunderaQueryFactory
 {
 
     private static Log log = LogFactory.getLog(KunderaQueryFactory.class);
+
     private final ClientType clientType;
 
     KunderaQueryFactory(ClientType clientType)
@@ -63,14 +64,14 @@ public class KunderaQueryFactory
             Class clazz;
             switch (clientType)
             {
-                case PELOPS:
-                    clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQuery");
-                    break;
-                case THRIFT:
-                    clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQuery");
-                    break;
-                default:
-                    throw new ClassNotFoundException("Invalid Client type" + clientType);
+            case PELOPS:
+                clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQuery");
+                break;
+            case THRIFT:
+                clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQuery");
+                break;
+            default:
+                throw new ClassNotFoundException("Invalid Client type" + clientType);
             }
 
             @SuppressWarnings("rawtypes")
@@ -106,7 +107,7 @@ public class KunderaQueryFactory
         {
             log.fatal(null, ex);
         }
-        
+
         return kunderaQuery;
     }
 
@@ -118,14 +119,14 @@ public class KunderaQueryFactory
             Class clazz;
             switch (clientType)
             {
-                case PELOPS:
-                    clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQueryParser");
-                    break;
-                case THRIFT:
-                    clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQueryParser");
-                    break;
-                default:
-                    throw new ClassNotFoundException("Invalid Client type" + clientType);
+            case PELOPS:
+                clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQueryParser");
+                break;
+            case THRIFT:
+                clazz = Class.forName("com.impetus.client.cassandra.query.KunderaNativeQueryParser");
+                break;
+            default:
+                throw new ClassNotFoundException("Invalid Client type" + clientType);
             }
 
             @SuppressWarnings("rawtypes")
@@ -161,7 +162,7 @@ public class KunderaQueryFactory
         {
             log.fatal(null, ex);
         }
-        
+
         return parser;
     }
 }

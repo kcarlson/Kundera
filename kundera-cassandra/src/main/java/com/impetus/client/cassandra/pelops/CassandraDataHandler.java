@@ -44,13 +44,11 @@ public class CassandraDataHandler extends DataHandler
     /**
      * The log.
      */
-    protected static Log log = LogFactory.getLog(CassandraDataHandler.class);    
+    protected static Log log = LogFactory.getLog(CassandraDataHandler.class);
 
     /** The timestamp. */
     protected long timestamp = System.currentTimeMillis();
-    
-    
-    
+
     /**
      * From thrift row.
      *
@@ -68,8 +66,7 @@ public class CassandraDataHandler extends DataHandler
      */
 
     // TODO: this is a duplicate code snippet and we need to refactor this.
-    public <E> E fromThriftRow(Class<E> clazz, EntityMetadata m, DataRow<SuperColumn> tr)
-        throws Exception
+    public <E> E fromThriftRow(Class<E> clazz, EntityMetadata m, DataRow<SuperColumn> tr) throws Exception
     {
         // Instantiate a new instance
         E e = null;
@@ -185,13 +182,13 @@ public class CassandraDataHandler extends DataHandler
             }
 
             String thriftColumnName = PropertyAccessorFactory.STRING.fromBytes(c.getName());
-            
+
             // KEY is row key in cql result.
-            if("KEY".equals(thriftColumnName))
+            if ("KEY".equals(thriftColumnName))
             {
                 continue;
             }
-            
+
             byte[] thriftColumnValue = c.getValue();
 
             if (null == thriftColumnValue)
@@ -309,8 +306,7 @@ public class CassandraDataHandler extends DataHandler
 
                 // Add this embedded object to cache
                 ElementCollectionCacheManager.getInstance().addElementCollectionCacheMapping(tr.getId(),
-                        embeddedObject,
-                        scName);
+                        embeddedObject, scName);
             }
             else
             {
@@ -341,8 +337,9 @@ public class CassandraDataHandler extends DataHandler
                                 // super column family. It's stored as a super
                                 // column that would
                                 // have just one column with the same name
-                                log.debug(e.getMessage()
-                                        + ". Possible case of entity column in a super column family. Will be treated as a super column.");
+                                log
+                                        .debug(e.getMessage()
+                                                + ". Possible case of entity column in a super column family. Will be treated as a super column.");
                                 superColumnObj = Bytes.toUTF8(value);
                             }
 
@@ -365,7 +362,7 @@ public class CassandraDataHandler extends DataHandler
             }
         }
 
-        if ((embeddedCollection != null) &&!embeddedCollection.isEmpty())
+        if ((embeddedCollection != null) && !embeddedCollection.isEmpty())
         {
             PropertyAccessorHelper.set(entity, embeddedCollectionField, embeddedCollection);
         }
@@ -399,7 +396,8 @@ public class CassandraDataHandler extends DataHandler
         // If this super column is variable in number (name#sequence format)
         if (scName.indexOf(com.impetus.kundera.Constants.EMBEDDED_COLUMN_NAME_DELIMITER) != -1)
         {
-            StringTokenizer st = new StringTokenizer(scName, com.impetus.kundera.Constants.EMBEDDED_COLUMN_NAME_DELIMITER);
+            StringTokenizer st = new StringTokenizer(scName,
+                    com.impetus.kundera.Constants.EMBEDDED_COLUMN_NAME_DELIMITER);
 
             if (st.hasMoreTokens())
             {
@@ -418,7 +416,7 @@ public class CassandraDataHandler extends DataHandler
             catch (NoSuchMethodException nsme)
             {
                 throw new PersistenceException(embeddedClass.getName()
-                                               + " is @Embeddable and must have a default no-argument constructor.");
+                        + " is @Embeddable and must have a default no-argument constructor.");
             }
 
             embeddedObject = embeddedClass.newInstance();
@@ -464,8 +462,8 @@ public class CassandraDataHandler extends DataHandler
 
         return embeddedObject;
     }
-    
-     /**
+
+    /**
      * Adds the columns to thrift row.
      *
      * @param timestamp the timestamp
@@ -506,7 +504,7 @@ public class CassandraDataHandler extends DataHandler
 
         tr.setColumns(columns);
     }
-    
+
     /**
      * Builds the thrift super column.
      *
@@ -537,8 +535,9 @@ public class CassandraDataHandler extends DataHandler
                 // This is an entity column to be persisted in a super column
                 // family. It will be stored as a super column that would
                 // have just one column with the same name
-                log.info(exp.getMessage()
-                        + ". Possible case of entity column in a super column family. Will be treated as a super column.");
+                log
+                        .info(exp.getMessage()
+                                + ". Possible case of entity column in a super column family. Will be treated as a super column.");
                 value = superColumnObject.toString().getBytes();
             }
 

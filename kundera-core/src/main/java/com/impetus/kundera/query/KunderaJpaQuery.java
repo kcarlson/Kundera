@@ -36,7 +36,6 @@ import com.impetus.kundera.metadata.model.MetamodelImpl;
 import java.util.*;
 import javax.persistence.Parameter;
 
-
 /**
  * The Class KunderaQuery.
  */
@@ -95,8 +94,8 @@ public class KunderaJpaQuery implements KunderaQuery
     // (AND, OR etc.)
     /** The filters queue. */
     private Queue filtersQueue = new LinkedList();
-    
-    private Map<Parameter<?>,Object> parameters;
+
+    private Map<Parameter<?>, Object> parameters;
 
     /**
      * Instantiates a new kundera query.
@@ -357,9 +356,9 @@ public class KunderaJpaQuery implements KunderaQuery
     @Override
     public void setParameter(String name, String value)
     {
-        if(parameters == null)
+        if (parameters == null)
         {
-            parameters = new HashMap<Parameter<?>,Object>(4);
+            parameters = new HashMap<Parameter<?>, Object>(4);
         }
         parameters.put(new KunderaParameter(name), value);
         boolean found = false;

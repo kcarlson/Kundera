@@ -49,7 +49,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
 /**
  * The Class CassQuery.
  * 
@@ -65,7 +64,7 @@ public class CassQuery extends QueryImpl implements Query
     private EntityReader reader;
 
     private int maxResult = 10000;
-    
+
     /**
      * Instantiates a new cass query.
      * 
@@ -159,8 +158,8 @@ public class CassQuery extends QueryImpl implements Query
                 String condition = clause.getCondition();
                 String value = clause.getValue();
                 // value.e
-                expr.add(Selector.newIndexExpression(fieldName, getOperator(condition, idPresent),
-                        getBytesValue(fieldName, m, value)));
+                expr.add(Selector.newIndexExpression(fieldName, getOperator(condition, idPresent), getBytesValue(
+                        fieldName, m, value)));
             }
             else
             {
@@ -180,7 +179,7 @@ public class CassQuery extends QueryImpl implements Query
             indexClause.setExpressions(expr);
             clauses.add(indexClause);
         }
-        
+
         idxClauses.put(idPresent, clauses);
 
         return idxClauses;
@@ -358,6 +357,6 @@ public class CassQuery extends QueryImpl implements Query
     {
         this.maxResult = maxResult;
         return this;
-    }    
-    
+    }
+
 }

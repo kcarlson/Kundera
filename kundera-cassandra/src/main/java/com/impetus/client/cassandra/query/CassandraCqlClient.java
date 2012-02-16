@@ -13,7 +13,6 @@
  *  * limitations under the License.
  ******************************************************************************/
 
-
 package com.impetus.client.cassandra.query;
 
 import com.impetus.client.cassandra.pelops.PelopsClientFactory;
@@ -35,30 +34,37 @@ import org.apache.commons.logging.LogFactory;
 public class CassandraCqlClient
 {
     private static Log log = LogFactory.getLog(CassNativeQuery.class);
+
     private final Client client;
 
     protected long timeOfLastFailure = 0;
+
     protected int numFailures = 0;
+
     protected String username = null;
+
     protected String url = null;
+
     String currentKeyspace;
+
     //ColumnDecoder decoder;
     private Compression defaultCompression = Compression.GZIP;
+
     String currentColumnFamily;
-   
+
     private static class CassandraCqlClientHolder
     {
         static final CassandraCqlClient INSTANCE = new CassandraCqlClient();
     }
-    
+
     static CassandraCqlClient getInstance()
     {
         return CassandraCqlClientHolder.INSTANCE;
     }
-    
+
     private CassandraCqlClient()
     {
-        if(PelopsClientFactory.POOL_NAME == null)
+        if (PelopsClientFactory.POOL_NAME == null)
         {
             //TODO: Cleanup.
             throw new RuntimeException("Pool name is null");
@@ -66,7 +72,7 @@ public class CassandraCqlClient
         IThriftPool dbConnPool = Pelops.getDbConnPool(PelopsClientFactory.POOL_NAME);
         IThriftPool.IPooledConnection connection = dbConnPool.getConnection();
         client = connection.getAPI();
-        
+
         try
         {
             String keyspace = dbConnPool.getKeyspace();
@@ -96,7 +102,7 @@ public class CassandraCqlClient
             log.fatal(null, e);
         }
     }
-    
+
     /**
      * Execute a CQL query using the default compression methodology.
      *
@@ -108,11 +114,12 @@ public class CassandraCqlClient
      * @throws SchemaDisagreementException when the client side and server side are at different versions of schema (Thrift)
      * @throws TException                  when there is a error in Thrift processing
      */
-    protected CqlResult execute(String queryStr) throws InvalidRequestException, UnavailableException, TimedOutException, SchemaDisagreementException, TException
+    protected CqlResult execute(String queryStr) throws InvalidRequestException, UnavailableException,
+            TimedOutException, SchemaDisagreementException, TException
     {
         return execute(queryStr, defaultCompression);
     }
-    
+
     /**
      * Execute a CQL query.
      *
@@ -125,7 +132,8 @@ public class CassandraCqlClient
      * @throws SchemaDisagreementException when the client side and server side are at different versions of schema (Thrift)
      * @throws TException                  when there is a error in Thrift processing
      */
-    protected CqlResult execute(String queryStr, Compression compression) throws InvalidRequestException, UnavailableException, TimedOutException, SchemaDisagreementException, TException
+    protected CqlResult execute(String queryStr, Compression compression) throws InvalidRequestException,
+            UnavailableException, TimedOutException, SchemaDisagreementException, TException
     {
         currentKeyspace = determineCurrentKeyspace(queryStr, currentKeyspace);
         currentColumnFamily = determineCurrentColumnFamily(queryStr);
@@ -141,8 +149,9 @@ public class CassandraCqlClient
             throw error;
         }
     }
-    
-    public CqlResult executeQuery(String query) throws InvalidRequestException, UnavailableException, TimedOutException, SchemaDisagreementException, TException
+
+    public CqlResult executeQuery(String query) throws InvalidRequestException, UnavailableException,
+            TimedOutException, SchemaDisagreementException, TException
     {
         //TODO: Check not closed.
         return execute(query, defaultCompression);
