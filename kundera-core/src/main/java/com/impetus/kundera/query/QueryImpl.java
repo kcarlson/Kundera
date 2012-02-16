@@ -47,6 +47,7 @@ import com.impetus.kundera.persistence.PersistenceDelegator;
 import com.impetus.kundera.persistence.handler.impl.EntitySaveGraph;
 import com.impetus.kundera.query.KunderaJpaQuery.FilterClause;
 import com.impetus.kundera.query.exception.QueryHandlerException;
+import java.util.regex.Pattern;
 
 
 /**
@@ -442,7 +443,7 @@ public abstract class QueryImpl implements Query
     @Override
     public Set<Parameter<?>> getParameters()
     {
-        throw new NotImplementedException("TODO");
+        return kunderaQuery.getParameters();
     }
 
     /*
@@ -453,7 +454,7 @@ public abstract class QueryImpl implements Query
     @Override
     public Parameter<?> getParameter(String paramString)
     {
-        throw new NotImplementedException("TODO");
+        return kunderaQuery.getParameter(paramString);
     }
 
     /*
@@ -521,7 +522,7 @@ public abstract class QueryImpl implements Query
     @Override
     public Object getParameterValue(String paramString)
     {
-        throw new NotImplementedException("TODO");
+        return kunderaQuery.getParameterValue(paramString);
     }
 
     /*
@@ -949,4 +950,25 @@ public abstract class QueryImpl implements Query
      * @return entityReader entity reader.
      */
     protected abstract EntityReader getReader();
+
+    /**
+     *
+     * @return The jpa query with parameters injected.
+     */
+    @Override
+    public String toString()
+    {
+        String formattedQuery = query;
+        for(Parameter param : getParameters())
+        {
+            String regex = String.format(":+%s+",param.getName());
+            Pattern pattern = Pattern.compile(regex);
+            String val = getParameterValue(param.getName()).toString();
+            formattedQuery = pattern.matcher(formattedQuery).replaceAll(val);
+        }
+        
+        return formattedQuery;
+    }
+    
+    
 }

@@ -189,7 +189,7 @@ public class EntityManagerImpl implements EntityManager
      * @see javax.persistence.EntityManager#createQuery(java.lang.String)
      */
     @Override
-    public final Query createQuery(String query)
+    public Query createQuery(String query)
     {
         return persistenceDelegator.createQuery(query);
     }
