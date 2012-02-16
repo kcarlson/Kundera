@@ -610,7 +610,8 @@ public abstract class QueryImpl implements Query
                 }
                 try
                 {
-                    result.add(getReader().computeGraph(e, graphs, relationalValues, client, m, persistenceDelegeator));
+                    Object obj = getReader().computeGraph(e, graphs, relationalValues, client, m, persistenceDelegeator);
+                    result.add(obj);
                 }
                 catch (Exception ex)
                 {

@@ -26,8 +26,6 @@ import com.impetus.kundera.query.QueryImpl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Query;
 import org.apache.cassandra.thrift.*;
 import org.apache.commons.lang.NotImplementedException;
@@ -130,7 +128,14 @@ public class CassNativeQuery extends QueryImpl implements Query
     @Override
     public Object getSingleResult()
     {
-        throw new NotImplementedException("TODO");
+        doExecute();
+        
+        if(currentResultList.size() > 1)
+        {
+            throw new RuntimeException("Query returned more than one result: " + query);
+        }
+        
+        return currentResultList.isEmpty() ? null : currentResultList.get(0);
     }
 
     @Override
