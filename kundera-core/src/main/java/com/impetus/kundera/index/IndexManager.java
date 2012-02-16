@@ -24,6 +24,7 @@ import com.impetus.kundera.metadata.MetadataUtils;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.property.PropertyAccessorHelper;
 
+
 /**
  * Manager responsible to co-ordinate with an Indexer. It is bound with
  * EntityManager.

@@ -20,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.impetus.kundera.client.DBType;
 
+
 /**
  * The Class ReaderResolver.
  * 
@@ -35,8 +36,9 @@ final class ReaderResolver
     {
         try
         {
-            readerCol.put(DBType.CASSANDRA, (EntityReader) Class.forName(
-                    "com.impetus.client.cassandra.query.CassandraEntityReader").newInstance());
+            readerCol.put(DBType.CASSANDRA,
+                    (EntityReader) Class.forName("com.impetus.client.cassandra.query.CassandraEntityReader")
+                            .newInstance());
             readerCol.put(DBType.RDBMS, (EntityReader) Class
                     .forName("com.impetus.client.rdbms.query.RDBMSEntityReader").newInstance());
         }

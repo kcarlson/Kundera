@@ -26,6 +26,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+
 //@Entity
 /**
  * The Class Department.

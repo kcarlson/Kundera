@@ -27,6 +27,7 @@ import javax.persistence.Table;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+
 /**
  * Validates entity for JPA rules.
  *

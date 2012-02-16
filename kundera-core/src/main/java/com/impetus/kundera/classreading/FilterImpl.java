@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.kundera.classreading;
 
+
 /**
  * Basic implementation to skip well-known packages and allow only *.class files
  * 

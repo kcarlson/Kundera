@@ -32,17 +32,14 @@ public class ThriftRow
      * name of the family.
      */
     private String columnFamilyName;
-
     /**
      * list of thrift columns from the row.
      */
     private List<Column> columns;
-
     /**
      * Id of the row.
      */
     private String id;
-
     /**
      * list of thrift super columns columns from the row.
      */

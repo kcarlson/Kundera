@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Holds metadata for embedded column in entity.
  *

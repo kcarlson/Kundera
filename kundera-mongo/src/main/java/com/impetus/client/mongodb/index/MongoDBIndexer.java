@@ -30,6 +30,7 @@ import com.impetus.kundera.index.Indexer;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.metadata.model.PropertyIndex;
 
+
 /**
  * Provides indexing functionality for MongoDB database.
  * 

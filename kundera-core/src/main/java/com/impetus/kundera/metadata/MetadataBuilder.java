@@ -31,6 +31,7 @@ import com.impetus.kundera.metadata.processor.TableProcessor;
 import com.impetus.kundera.metadata.validator.EntityValidator;
 import com.impetus.kundera.metadata.validator.EntityValidatorImpl;
 
+
 /**
  * Concrete implementation of IMetadataManager.
  * 

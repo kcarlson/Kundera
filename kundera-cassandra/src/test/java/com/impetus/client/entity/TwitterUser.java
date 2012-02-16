@@ -29,6 +29,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+
 /**
  * Entity Class for User object.
  *
@@ -39,7 +40,7 @@ import javax.persistence.Table;
 @Table(name = "users", schema = "Blog")
 public class TwitterUser
 {
-
+    
     /** The user id. */
     @Id
     private String userId; // PK

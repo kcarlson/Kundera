@@ -18,6 +18,7 @@ package com.impetus.kundera.metadata.model;
 import com.impetus.kundera.proxy.EntityEnhancerFactory;
 import com.impetus.kundera.proxy.LazyInitializerFactory;
 
+
 /**
  * The Class CoreMetadata.
  *

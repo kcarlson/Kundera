@@ -31,6 +31,7 @@ import com.impetus.kundera.metadata.MetadataProcessor;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.metadata.model.PropertyIndex;
 
+
 /**
  * The Class BaseMetadataProcessor.
  * 

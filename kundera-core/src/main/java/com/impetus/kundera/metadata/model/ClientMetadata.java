@@ -17,6 +17,7 @@ package com.impetus.kundera.metadata.model;
 
 import org.apache.commons.lang.StringUtils;
 
+
 /**
  * The Class ClientMetadata.
  *
@@ -24,7 +25,7 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ClientMetadata
 {
-
+    
     /** The client implementor. */
     private String clientImplementor;
 

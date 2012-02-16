@@ -28,6 +28,7 @@ import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessor;
 import org.scale7.cassandra.pelops.Bytes;
 
+
 /**
  * The Class DateAccessor.
  * 

@@ -26,12 +26,13 @@ import com.impetus.kundera.PersistenceProperties;
 import com.impetus.kundera.metadata.model.KunderaMetadata;
 import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 
+
 /**
  * The Class PelopsUtils.
  */
 public class PelopsUtils
 {
-
+    
     /** The logger. */
     private static Logger logger = LoggerFactory.getLogger(PelopsUtils.class);
 

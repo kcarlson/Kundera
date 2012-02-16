@@ -24,6 +24,7 @@ import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
+
 /**
  * The Class MetamodelImpl.
  *
@@ -31,7 +32,7 @@ import javax.persistence.metamodel.Metamodel;
  */
 public class MetamodelImpl implements Metamodel
 {
-
+    
     /** The entity metadata map. */
     Map<Class<?>, EntityMetadata> entityMetadataMap;
 

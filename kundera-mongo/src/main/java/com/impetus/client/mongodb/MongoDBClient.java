@@ -44,6 +44,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
+
 /**
  * CLient class for MongoDB database.
  * 
@@ -408,8 +409,8 @@ public class MongoDBClient implements Client
             return null;
         }
 
-        Object enhancedEntity = new MongoDBDataHandler(this, getPersistenceUnit()).getEntityFromDocument(entityMetadata
-                .getEntityClazz(), entityMetadata, fetchedDocument, relationNames);
+        Object enhancedEntity = new MongoDBDataHandler(this, getPersistenceUnit()).getEntityFromDocument(
+                entityMetadata.getEntityClazz(), entityMetadata, fetchedDocument, relationNames);
 
         return (E) enhancedEntity;
     }
@@ -439,8 +440,8 @@ public class MongoDBClient implements Client
         while (cursor.hasNext())
         {
             DBObject fetchedDocument = cursor.next();
-            Object entity = new MongoDBDataHandler(this, getPersistenceUnit()).getEntityFromDocument(entityMetadata
-                    .getEntityClazz(), entityMetadata, fetchedDocument, null);
+            Object entity = new MongoDBDataHandler(this, getPersistenceUnit()).getEntityFromDocument(
+                    entityMetadata.getEntityClazz(), entityMetadata, fetchedDocument, null);
             entities.add(entity);
         }
         return entities;
@@ -650,8 +651,8 @@ public class MongoDBClient implements Client
             return null;
         }
 
-        Object entity = new MongoDBDataHandler(this, getPersistenceUnit()).getEntityFromDocument(entityMetadata
-                .getEntityClazz(), entityMetadata, fetchedDocument, relationNames);
+        Object entity = new MongoDBDataHandler(this, getPersistenceUnit()).getEntityFromDocument(
+                entityMetadata.getEntityClazz(), entityMetadata, fetchedDocument, relationNames);
 
         return entity;
     }

@@ -18,6 +18,7 @@ package com.impetus.kundera.client;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+
 /**
  * The Class ClientIdentifier.
  *

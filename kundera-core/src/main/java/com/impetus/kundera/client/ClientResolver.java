@@ -23,6 +23,7 @@ import com.impetus.kundera.loader.GenericClientFactory;
 import com.impetus.kundera.metadata.model.KunderaMetadata;
 import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 
+
 /**
  * The Class ClientResolver.
  *

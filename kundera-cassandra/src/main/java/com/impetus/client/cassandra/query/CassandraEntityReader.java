@@ -37,6 +37,7 @@ import com.impetus.kundera.persistence.AbstractEntityReader;
 import com.impetus.kundera.persistence.EntityReader;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 
+
 /**
  * The Class CassandraEntityReader.
  * 

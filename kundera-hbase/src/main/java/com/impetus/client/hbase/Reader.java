@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.hbase.client.HTable;
 
+
 /**
  * The Interface Reader.
  */

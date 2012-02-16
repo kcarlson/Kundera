@@ -18,6 +18,7 @@ package com.impetus.kundera.property.accessor;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessor;
 
+
 /**
  * The Class CharAccessor.
  *

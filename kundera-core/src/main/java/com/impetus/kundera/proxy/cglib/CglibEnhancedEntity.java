@@ -24,6 +24,7 @@ import net.sf.cglib.proxy.InvocationHandler;
 
 import com.impetus.kundera.proxy.EnhancedEntity;
 
+
 /**
  * Implementation of EnhancedEntity using cglib library.
  * 

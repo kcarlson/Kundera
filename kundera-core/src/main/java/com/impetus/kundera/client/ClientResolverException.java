@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.kundera.client;
 
+
 /**
  * The Class ClientResolverException.
  *

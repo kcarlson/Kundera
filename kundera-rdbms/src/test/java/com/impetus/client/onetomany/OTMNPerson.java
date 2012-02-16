@@ -25,6 +25,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
  * The Class OTMNPerson.
  */
@@ -32,7 +33,7 @@ import javax.persistence.Table;
 @Table(name = "PERSON", schema = "test")
 public class OTMNPerson
 {
-
+    
     /** The person id. */
     @Id
     @Column(name = "PERSON_ID")

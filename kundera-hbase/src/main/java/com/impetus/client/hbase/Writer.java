@@ -25,6 +25,7 @@ import org.apache.hadoop.hbase.client.HTable;
 import com.impetus.kundera.db.RelationHolder;
 import com.impetus.kundera.metadata.model.Column;
 
+
 /**
  * HBase data writer.
  * 

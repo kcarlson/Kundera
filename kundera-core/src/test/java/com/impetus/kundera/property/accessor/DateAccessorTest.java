@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import com.impetus.kundera.property.PropertyAccessException;
 
+
 /**
  * The Class DateAccessorTest.
  *

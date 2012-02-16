@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.impetus.kundera.persistence.EntityManagerFactoryImpl;
 
+
 /**
  * The Class ApplicationMetadata.
  *

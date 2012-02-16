@@ -37,12 +37,13 @@ import com.impetus.kundera.metadata.model.KunderaMetadata;
 import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 import com.impetus.kundera.persistence.EntityReader;
 
+
 /**
  * A factory for creating PelopsClient objects.
  */
 public class PelopsClientFactory extends GenericClientFactory
 {
-
+    
     /** The logger. */
     private static Logger logger = LoggerFactory.getLogger(PelopsClientFactory.class);
 
@@ -51,7 +52,7 @@ public class PelopsClientFactory extends GenericClientFactory
 
     /** The reader. */
     private EntityReader reader;
-
+    
     public static String POOL_NAME;
 
     /* (non-Javadoc)

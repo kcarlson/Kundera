@@ -22,6 +22,7 @@ import javax.persistence.Embeddable;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+
 /**
  * The Class PostData.
  */

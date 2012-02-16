@@ -30,6 +30,7 @@ import javax.persistence.Table;
 
 import com.impetus.kundera.annotations.Index;
 
+
 /**
  * The Class Person2.
  *

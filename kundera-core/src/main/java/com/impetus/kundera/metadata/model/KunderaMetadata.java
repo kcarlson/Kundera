@@ -18,6 +18,7 @@ package com.impetus.kundera.metadata.model;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * The Class KunderaMetadata.
  *

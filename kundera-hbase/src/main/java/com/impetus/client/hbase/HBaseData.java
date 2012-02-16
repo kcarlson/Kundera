@@ -22,6 +22,7 @@ import org.apache.hadoop.hbase.KeyValue;
 
 import com.impetus.kundera.DataWrapper;
 
+
 /**
  * The Class HBaseData.
  *

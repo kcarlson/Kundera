@@ -18,6 +18,7 @@ package com.impetus.kundera.persistence;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+
 /**
  * The Class JPAImplementationTestSuite.
  */

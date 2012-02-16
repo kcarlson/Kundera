@@ -23,6 +23,7 @@ import java.io.ObjectOutputStream;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessor;
 
+
 /**
  * The Class ObjectAccessor.
  * 

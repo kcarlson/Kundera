@@ -45,6 +45,7 @@ import com.impetus.kundera.metadata.model.KunderaMetadata;
 import com.impetus.kundera.metadata.model.MetamodelImpl;
 import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 
+
 /**
  * The Class MetamodelLoader.
  *
@@ -52,7 +53,7 @@ import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
  */
 public class MetamodelLoader extends ApplicationLoader
 {
-
+    
     /** The log. */
     private static Logger log = LoggerFactory.getLogger(MetamodelLoader.class);
 
@@ -201,10 +202,10 @@ public class MetamodelLoader extends ApplicationLoader
             className = cf.getName();
             List<String> annotations = new ArrayList<String>();
 
-            reader.accumulateAnnotations(annotations, (AnnotationsAttribute) cf
-                    .getAttribute(AnnotationsAttribute.visibleTag));
-            reader.accumulateAnnotations(annotations, (AnnotationsAttribute) cf
-                    .getAttribute(AnnotationsAttribute.invisibleTag));
+            reader.accumulateAnnotations(annotations,
+                    (AnnotationsAttribute) cf.getAttribute(AnnotationsAttribute.visibleTag));
+            reader.accumulateAnnotations(annotations,
+                    (AnnotationsAttribute) cf.getAttribute(AnnotationsAttribute.invisibleTag));
 
             // iterate through all valid annotations
             for (String validAnn : reader.getValidAnnotations())

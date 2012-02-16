@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.kundera;
 
+
 /**
  * Contains all constants properties supported in persistence.xml
  * 

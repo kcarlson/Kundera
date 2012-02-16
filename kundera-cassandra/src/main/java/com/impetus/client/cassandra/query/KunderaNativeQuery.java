@@ -28,28 +28,25 @@ import java.util.Queue;
  */
 public class KunderaNativeQuery implements KunderaQuery
 {
-
+    
     private String[] persistenceUnits;
-
     private String entityName;
-
     private EntityMetadata entityMetadata;
-
     private Class<?> entityClass;
 
     public KunderaNativeQuery(String[] persistenceUnits)
     {
         this.persistenceUnits = persistenceUnits;
     }
-
+    
     @Override
     public void postParsingInit()
     {
         MetamodelImpl metamodel = KunderaMetadataManager.getMetamodel(persistenceUnits);
-
+        
         Class clazz = metamodel.getEntityClass(entityName);
         entityMetadata = KunderaMetadataManager.getEntityMetadata(clazz, persistenceUnits);
-
+        
         entityClass = getMetamodel().getEntityClass(entityName);
     }
 
@@ -62,7 +59,7 @@ public class KunderaNativeQuery implements KunderaQuery
     {
         return KunderaMetadataManager.getMetamodel(persistenceUnits);
     }
-
+    
     @Override
     public void setGrouping(String groupingClause)
     {
@@ -158,5 +155,5 @@ public class KunderaNativeQuery implements KunderaQuery
     {
         this.persistenceUnits = persistenceUnits;
     }
-
+    
 }

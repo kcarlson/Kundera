@@ -17,6 +17,7 @@ package com.impetus.client.entity;
 
 import javax.persistence.Embeddable;
 
+
 /**
  * Class for Tweets.
  *

@@ -20,6 +20,7 @@ import java.util.Queue;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.query.KunderaJpaQuery.SortOrdering;
 
+
 /**
  * The Class KunderaQuery.
  */
@@ -41,7 +42,6 @@ public interface KunderaQuery
      *            the new result
      */
     public void setResult(String result);
-
     /**
      * Sets the from.
      * 
@@ -132,7 +132,7 @@ public interface KunderaQuery
      * 
      * @return the entity metadata
      */
-    public EntityMetadata getEntityMetadata();
+    public  EntityMetadata getEntityMetadata();
 
     /**
      * Gets the filter clause queue.
@@ -140,6 +140,7 @@ public interface KunderaQuery
      * @return the filters
      */
     public Queue getFilterClauseQueue();
+
 
     /**
      * Gets the persistence units.

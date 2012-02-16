@@ -18,6 +18,7 @@ package com.impetus.kundera.client;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+
 /**
  * The Class DataHandler.
  *

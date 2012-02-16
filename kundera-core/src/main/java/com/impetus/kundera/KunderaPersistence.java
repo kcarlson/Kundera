@@ -30,6 +30,7 @@ import com.impetus.kundera.loader.ApplicationLoader;
 import com.impetus.kundera.loader.CoreLoader;
 import com.impetus.kundera.persistence.EntityManagerFactoryImpl;
 
+
 /**
  * The Class KunderaPersistence.
  * 

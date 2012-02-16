@@ -25,6 +25,7 @@ import com.impetus.kundera.persistence.handler.api.MappingHandler;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessorHelper;
 
+
 /**
  * The Class ManyToManyHandler.
  * 

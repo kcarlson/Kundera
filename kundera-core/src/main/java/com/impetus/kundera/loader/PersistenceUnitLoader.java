@@ -33,6 +33,7 @@ import com.impetus.kundera.metadata.model.ApplicationMetadata;
 import com.impetus.kundera.metadata.model.KunderaMetadata;
 import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 
+
 /**
  * The Class PersistenceUnitLoader.
  *
@@ -40,7 +41,7 @@ import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
  */
 public class PersistenceUnitLoader extends ApplicationLoader
 {
-
+    
     /** The log. */
     private static Logger log = LoggerFactory.getLogger(PersistenceUnitLoader.class);
 
@@ -119,8 +120,8 @@ public class PersistenceUnitLoader extends ApplicationLoader
     {
         try
         {
-            Enumeration<URL> xmls = Thread.currentThread().getContextClassLoader().getResources(
-                    "META-INF/persistence.xml");
+            Enumeration<URL> xmls = Thread.currentThread().getContextClassLoader()
+                    .getResources("META-INF/persistence.xml");
 
             if (!xmls.hasMoreElements())
             {

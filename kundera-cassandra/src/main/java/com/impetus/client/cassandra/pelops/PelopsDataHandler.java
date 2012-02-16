@@ -34,14 +34,16 @@ import java.util.Map;
 import org.apache.cassandra.thrift.*;
 import org.scale7.cassandra.pelops.Selector;
 
+
 /**
  * Provides Pelops utility methods for data held in Column family based stores.
  *
  * @author amresh.singh
  */
-public class PelopsDataHandler extends CassandraDataHandler
+public class PelopsDataHandler
+    extends CassandraDataHandler
 {
-
+    
     /** The client. */
     private Client client;
 
@@ -79,8 +81,8 @@ public class PelopsDataHandler extends CassandraDataHandler
 
         if (!superColumnNames.isEmpty())
         {
-            List<SuperColumn> thriftSuperColumns = selector.getSuperColumnsFromRow(m.getTableName(), rowKey, Selector
-                    .newColumnsPredicateAll(true, 10000), ConsistencyLevel.ONE);
+            List<SuperColumn> thriftSuperColumns = selector.getSuperColumnsFromRow(m.getTableName(), rowKey,
+                    Selector.newColumnsPredicateAll(true, 10000), ConsistencyLevel.ONE);
             e = fromSuperColumnThriftRow(clazz, m, new ThriftRow(rowKey, m.getTableName(), null, thriftSuperColumns),
                     relationNames, isWrapReq);
 
@@ -93,8 +95,8 @@ public class PelopsDataHandler extends CassandraDataHandler
             rowKeys.add(rKeyAsByte);
 
             Map<ByteBuffer, List<ColumnOrSuperColumn>> columnOrSuperColumnsFromRow = selector
-                    .getColumnOrSuperColumnsFromRows(new ColumnParent(m.getTableName()), rowKeys, Selector
-                            .newColumnsPredicateAll(true, 10000), ConsistencyLevel.ONE);
+                    .getColumnOrSuperColumnsFromRows(new ColumnParent(m.getTableName()), rowKeys,
+                            Selector.newColumnsPredicateAll(true, 10000), ConsistencyLevel.ONE);
 
             List<ColumnOrSuperColumn> colList = columnOrSuperColumnsFromRow.get(rKeyAsByte);
 
@@ -118,7 +120,7 @@ public class PelopsDataHandler extends CassandraDataHandler
 
         return e;
     }
-
+    
     /**
      * From thrift row.
      *
@@ -156,16 +158,20 @@ public class PelopsDataHandler extends CassandraDataHandler
      * @return the base data accessor. thrift row
      * @throws Exception the exception
      */
-    public ThriftRow toThriftRow(PelopsClient client, Object e, String id, EntityMetadata m, String columnFamily)
-            throws Exception
+    public ThriftRow toThriftRow(PelopsClient client,
+                                 Object e,
+                                 String id,
+                                 EntityMetadata m,
+                                 String columnFamily)
+        throws Exception
     {
         // timestamp to use in thrift column objects
         // long timestamp = System.currentTimeMillis();
 
         ThriftRow tr = new ThriftRow();
 
-        tr.setColumnFamilyName(columnFamily); // column-family name
-        tr.setId(id); // Id
+        tr.setColumnFamilyName(columnFamily);    // column-family name
+        tr.setId(id);                            // Id
 
         // Add super columns to thrift row
         addSuperColumnsToThriftRow(timestamp, client, tr, m, e, id);
@@ -182,6 +188,8 @@ public class PelopsDataHandler extends CassandraDataHandler
 
         return tr;
     }
+
+   
 
     /**
      * Adds the super columns to thrift row.
@@ -222,14 +230,16 @@ public class PelopsDataHandler extends CassandraDataHandler
 
                 // Check whether it's first time insert or updation
                 if (ecCacheHandler.isCacheEmpty())
-                { // First time insert
+                {    // First time insert
                     int count = 0;
 
                     for (Object obj : (Collection) superColumnObject)
                     {
                         superColumnName = superColumn.getName() + Constants.EMBEDDED_COLUMN_NAME_DELIMITER + count;
 
-                        SuperColumn thriftSuperColumn = buildThriftSuperColumn(superColumnName, timestamp, superColumn,
+                        SuperColumn thriftSuperColumn = buildThriftSuperColumn(superColumnName,
+                                timestamp,
+                                superColumn,
                                 obj);
 
                         tr.addSuperColumn(thriftSuperColumn);
@@ -249,12 +259,14 @@ public class PelopsDataHandler extends CassandraDataHandler
                         superColumnName = ecCacheHandler.getElementCollectionObjectName(id, obj);
 
                         if (superColumnName == null)
-                        { // Fresh row
+                        {    // Fresh row
                             superColumnName = superColumn.getName() + Constants.EMBEDDED_COLUMN_NAME_DELIMITER
-                                    + (++lastEmbeddedObjectCount);
+                                              + (++lastEmbeddedObjectCount);
                         }
 
-                        SuperColumn thriftSuperColumn = buildThriftSuperColumn(superColumnName, timestamp, superColumn,
+                        SuperColumn thriftSuperColumn = buildThriftSuperColumn(superColumnName,
+                                timestamp,
+                                superColumn,
                                 obj);
 
                         tr.addSuperColumn(thriftSuperColumn);
@@ -265,12 +277,16 @@ public class PelopsDataHandler extends CassandraDataHandler
             {
                 superColumnName = superColumn.getName();
 
-                SuperColumn thriftSuperColumn = buildThriftSuperColumn(superColumnName, timestamp, superColumn,
+                SuperColumn thriftSuperColumn = buildThriftSuperColumn(superColumnName,
+                        timestamp,
+                        superColumn,
                         superColumnObject);
 
                 tr.addSuperColumn(thriftSuperColumn);
             }
         }
     }
+
+    
 
 }

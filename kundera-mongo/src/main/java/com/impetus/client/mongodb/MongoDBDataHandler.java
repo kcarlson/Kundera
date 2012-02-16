@@ -45,6 +45,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 
+
 /**
  * Provides utility methods for handling data held in MongoDB.
  *
@@ -52,7 +53,7 @@ import com.mongodb.DBObject;
  */
 public class MongoDBDataHandler
 {
-
+    
     /** The client. */
     private Client client;
 
@@ -258,20 +259,22 @@ public class MongoDBDataHandler
 
                     Collection embeddedCollection = (Collection) embeddedObject;
 
-                    dbObj.put(superColumnField.getName(), DocumentObjectMapper.getDocumentListFromCollection(
-                            embeddedCollection, embeddedColumn.getColumns()));
+                    dbObj.put(
+                            superColumnField.getName(),
+                            DocumentObjectMapper.getDocumentListFromCollection(embeddedCollection,
+                                    embeddedColumn.getColumns()));
                 }
                 else
                 {
                     if (superColumnField.isAnnotationPresent(Embedded.class))
                     {
-                        dbObj.put(superColumnField.getName(), DocumentObjectMapper.getDocumentFromObject(
-                                embeddedObject, embeddedColumn.getColumns()));
+                        dbObj.put(superColumnField.getName(),
+                                DocumentObjectMapper.getDocumentFromObject(embeddedObject, embeddedColumn.getColumns()));
                     }
                     else
                     {
-                        dbObj.put(superColumnField.getName(), DocumentObjectMapper.getDocumentFromObject(entity,
-                                embeddedColumn.getColumns()));
+                        dbObj.put(superColumnField.getName(),
+                                DocumentObjectMapper.getDocumentFromObject(entity, embeddedColumn.getColumns()));
 
                     }
                 }
@@ -449,8 +452,8 @@ public class MongoDBDataHandler
                 else if (embeddedDocumentObject instanceof BasicDBObject)
                 {
                     Object embeddedObject = DocumentObjectMapper.getObjectFromDocument(
-                            (BasicDBObject) embeddedDocumentObject, superColumn.getField().getType(), superColumn
-                                    .getColumns());
+                            (BasicDBObject) embeddedDocumentObject, superColumn.getField().getType(),
+                            superColumn.getColumns());
                     list.add(embeddedObject);
 
                 }

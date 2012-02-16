@@ -22,6 +22,7 @@ import com.impetus.kundera.Constants;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessor;
 
+
 /**
  * The Class BigDecimalAccessor.
  *

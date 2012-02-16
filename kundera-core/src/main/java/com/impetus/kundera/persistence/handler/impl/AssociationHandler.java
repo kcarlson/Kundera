@@ -26,6 +26,7 @@ import javax.persistence.JoinColumn;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessorHelper;
 
+
 /**
  * The Class AssociationHandler.
  * 

@@ -38,6 +38,8 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXParseException;
 
+
+
 /**
  * The Class PersistenceXMLLoader.
  *
@@ -107,8 +109,8 @@ public class PersistenceXMLLoader
         {
             throw new PersistenceException("invalid persistence.xml", (Throwable) errors.get(0));
         }
-         * 
-         */
+        * 
+        */
         is.close(); // Close input Stream
         return doc;
     }

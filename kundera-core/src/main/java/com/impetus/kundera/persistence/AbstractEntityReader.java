@@ -40,6 +40,7 @@ import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessorHelper;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 
+
 /**
  * The Class AbstractEntityReader.
  *
@@ -169,8 +170,8 @@ public class AbstractEntityReader
                                 // parentid is entity ID!
                                 // that's it!
                                 String query = getQuery(DocumentIndexer.PARENT_ID_CLASS, e.getEntity().getClass()
-                                        .getCanonicalName().toLowerCase(), DocumentIndexer.PARENT_ID_FIELD, e
-                                        .getEntityId(), childClazz.getCanonicalName().toLowerCase());
+                                        .getCanonicalName().toLowerCase(), DocumentIndexer.PARENT_ID_FIELD,
+                                        e.getEntityId(), childClazz.getCanonicalName().toLowerCase());
                                 // System.out.println(query);
                                 Map<String, String> results = childClient.getIndexManager().search(query);
                                 Set<String> rsSet = new HashSet<String>(results.values());
@@ -180,13 +181,13 @@ public class AbstractEntityReader
 
                                 if (childClazz.equals(e.getEntity().getClass()))
                                 {
-                                    childs = (List<Object>) childClient.findAll(childClazz, rsSet
-                                            .toArray(new String[] {}));
+                                    childs = (List<Object>) childClient.findAll(childClazz,
+                                            rsSet.toArray(new String[] {}));
                                 }
                                 else
                                 {
-                                    childs = (List<Object>) persistenceDelegeator.find(childClazz, g, rsSet
-                                            .toArray(new String[] {}));
+                                    childs = (List<Object>) persistenceDelegeator.find(childClazz, g,
+                                            rsSet.toArray(new String[] {}));
                                 }
 
                             }
@@ -236,8 +237,8 @@ public class AbstractEntityReader
             chids = new HashSet(childs);
             // TODO: need to store object in sesion.
             // getSession().store(id, entity)
-            PropertyAccessorHelper.set(entity, f, PropertyAccessorHelper.isCollection(f.getType()) ? getFieldInstance(
-                    childs, f) : childs.get(0));
+            PropertyAccessorHelper.set(entity, f,
+                    PropertyAccessorHelper.isCollection(f.getType()) ? getFieldInstance(childs, f) : childs.get(0));
         }
         return chids;
     }
@@ -403,9 +404,11 @@ public class AbstractEntityReader
             }
             try
             {
-                PropertyAccessorHelper.set(child, objectGraph.getBidirectionalProperty(), PropertyAccessorHelper
-                        .isCollection(objectGraph.getBidirectionalProperty().getType()) ? getFieldInstance(obj,
-                        objectGraph.getBidirectionalProperty()) : e.getEntity());
+                PropertyAccessorHelper
+                        .set(child,
+                                objectGraph.getBidirectionalProperty(),
+                                PropertyAccessorHelper.isCollection(objectGraph.getBidirectionalProperty().getType()) ? getFieldInstance(
+                                        obj, objectGraph.getBidirectionalProperty()) : e.getEntity());
             }
             catch (PropertyAccessException ex)
             {
@@ -558,7 +561,9 @@ public class AbstractEntityReader
 
         try
         {
-            PropertyAccessorHelper.set(entity, childField,
+            PropertyAccessorHelper.set(
+                    entity,
+                    childField,
                     PropertyAccessorHelper.isCollection(childField.getType()) ? getFieldInstance(childrenEntities,
                             childField) : childrenEntities.get(0));
         }
