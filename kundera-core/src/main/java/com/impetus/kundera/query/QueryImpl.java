@@ -949,26 +949,6 @@ public abstract class QueryImpl implements Query
      * 
      * @return entityReader entity reader.
      */
-    protected abstract EntityReader getReader();
-
-    /**
-     *
-     * @return The jpa query with parameters injected.
-     */
-    @Override
-    public String toString()
-    {
-        String formattedQuery = query;
-        for(Parameter param : getParameters())
-        {
-            String regex = String.format(":+%s+",param.getName());
-            Pattern pattern = Pattern.compile(regex);
-            String val = getParameterValue(param.getName()).toString();
-            formattedQuery = pattern.matcher(formattedQuery).replaceAll(val);
-        }
-        
-        return formattedQuery;
-    }
-    
+    protected abstract EntityReader getReader();   
     
 }
