@@ -76,21 +76,45 @@ public class QueryResolver
             String... persistenceUnits)
     {
         String pu = null;
+        EntityMetadata entityMetadata = null;
+
+        if (!isNative)
+        {
+            kunderaQuery = new KunderaJpaQuery(persistenceUnits);
+            KunderaQueryParser parser = new KunderaJpaQueryParser(kunderaQuery, query);
+            parser.parse();
+            kunderaQuery.postParsingInit();
+
+            entityMetadata = kunderaQuery.getEntityMetadata();
+        }
 
         if (persistenceUnits.length == 1)
         {
             pu = persistenceUnits[0];
+        }
+        else if (!isNative)
+        {
+            pu = entityMetadata.getPersistenceUnit();
         }
 
         if (StringUtils.isEmpty(pu))
         {
             Map<String, PersistenceUnitMetadata> puMetadataMap = KunderaMetadata.INSTANCE.getApplicationMetadata()
                     .getPersistenceUnitMetadataMap();
+
             for (PersistenceUnitMetadata puMetadata : puMetadataMap.values())
             {
                 Properties props = puMetadata.getProperties();
                 String clientName = props.getProperty(PersistenceProperties.KUNDERA_CLIENT);
-                if (ClientType.RDBMS.name().equalsIgnoreCase(clientName))
+                //FIXME: Workaround since native queries are only supported for cassandra
+                if (isNative
+                        && ((ClientType.PELOPS.name().equalsIgnoreCase(clientName) || (ClientType.THRIFT.name()
+                                .equalsIgnoreCase(clientName)))))
+                {
+                    pu = puMetadata.getPersistenceUnitName();
+                    break;
+                }
+                else if (!isNative && ClientType.RDBMS.name().equalsIgnoreCase(clientName))
                 {
                     pu = puMetadata.getPersistenceUnitName();
                     break;
@@ -104,9 +128,11 @@ public class QueryResolver
         ClientType clientType = ClientType.valueOf(kunderaClientName.toUpperCase());
         clientType.setNative(isNative);
 
-        KunderaQueryFactory kunderaQueryFactory = new KunderaQueryFactory(clientType);
-
-        kunderaQuery = kunderaQueryFactory.build(query, persistenceUnits);
+        if (!isNative)
+        {
+            KunderaQueryFactory kunderaQueryFactory = new KunderaQueryFactory(clientType);
+            kunderaQuery = kunderaQueryFactory.build(query, persistenceUnits);
+        }
 
         Query q = null;
 
