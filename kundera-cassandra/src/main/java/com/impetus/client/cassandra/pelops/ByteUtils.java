@@ -14,12 +14,11 @@
  ******************************************************************************/
 package com.impetus.client.cassandra.pelops;
 
+import com.impetus.client.cassandra.pelops.composite.Composite;
+import com.impetus.client.cassandra.pelops.composite.MarshalException;
 import com.impetus.kundera.Constants;
-import com.impetus.kundera.metadata.model.EntityMetadata;
-import com.impetus.kundera.property.PropertyAccessException;
-import com.impetus.kundera.property.complex.Composite;
-import com.impetus.kundera.property.complex.MarshalException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 import org.scale7.cassandra.pelops.Bytes;
@@ -52,8 +51,6 @@ public class ByteUtils
         }
         catch (IllegalArgumentException ex)
         {
-            return Bytes.fromByteArray(str.getBytes());
-            /*
             try
             {
                 Composite composite = Composite.fromString(str);
@@ -63,7 +60,6 @@ public class ByteUtils
             {
                 return Bytes.fromByteArray(str.getBytes());
             }
-             */
         }
     }
 
@@ -73,7 +69,7 @@ public class ByteUtils
      * @param bytes
      * @return 
      */
-    public static String bytesToString(Bytes bytes)
+    public static String bytesToString(Bytes bytes, Field field)
     {
         try
         {
@@ -89,7 +85,15 @@ public class ByteUtils
         }
         catch (IllegalStateException ex)
         {
-            return Bytes.toUTF8(bytes.toByteArray());
+            try
+            {
+                Composite composite = Composite.parse(bytes, field);
+                return composite.toString();
+            }
+            catch (MarshalException ex2)
+            {
+                return Bytes.toUTF8(bytes.toByteArray());
+            }
         }
     }
 
@@ -99,9 +103,9 @@ public class ByteUtils
      * @param byteArray
      * @return 
      */
-    public static String byteArrayToString(byte[] byteArray)
+    public static String byteArrayToString(byte[] byteArray, Field field)
     {
-        return bytesToString(Bytes.fromByteArray(byteArray));
+        return bytesToString(Bytes.fromByteArray(byteArray), field);
     }
 
     /**
@@ -122,12 +126,21 @@ public class ByteUtils
         {
             try
             {
-                return str.getBytes(Constants.ENCODING);
+                Composite composite = Composite.fromString(str);
+                return composite.serialize();
             }
-            catch (UnsupportedEncodingException ex1)
+            catch (MarshalException ex2)
             {
-                throw new Exception(ex1.getMessage());
+                try
+                {
+                    return str.getBytes(Constants.ENCODING);
+                }
+                catch (UnsupportedEncodingException ex1)
+                {
+                    throw new Exception(ex1.getMessage());
+                }
             }
+
         }
     }
 
@@ -144,9 +157,17 @@ public class ByteUtils
             UUID uuid = UUID.fromString(str);
             return ByteBuffer.wrap(Bytes.fromUuid(uuid).toByteArray());
         }
-        catch (IllegalArgumentException ex)
+        catch (IllegalArgumentException ex1)
         {
-            return ByteBufferUtil.bytes(str);
+            try
+            {
+                Composite composite = Composite.fromString(str);
+                return composite.serializeToByteBuffer();
+            }
+            catch (MarshalException ex2)
+            {
+                return ByteBufferUtil.bytes(str);
+            }
         }
     }
 

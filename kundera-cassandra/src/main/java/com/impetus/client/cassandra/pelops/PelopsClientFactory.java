@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.impetus.client.cassandra.pelops;
 
+import com.impetus.client.cassandra.pelops.composite.Composite;
+import com.impetus.client.cassandra.pelops.composite.CompositeAccessor;
 import java.util.Properties;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -36,6 +38,7 @@ import com.impetus.kundera.metadata.MetadataUtils;
 import com.impetus.kundera.metadata.model.KunderaMetadata;
 import com.impetus.kundera.metadata.model.PersistenceUnitMetadata;
 import com.impetus.kundera.persistence.EntityReader;
+import com.impetus.kundera.property.PropertyAccessorFactory;
 
 /**
  * A factory for creating PelopsClient objects.
@@ -75,6 +78,9 @@ public class PelopsClientFactory extends GenericClientFactory
                 luceneDirPath));
 
         reader = new CassandraEntityReader();
+        
+        // Special cassandra composite class accessor
+        //PropertyAccessorFactory.map.put(Composite.class, new CompositeAccessor());
 
     }
 

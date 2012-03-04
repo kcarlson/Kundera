@@ -762,8 +762,7 @@ public class PersistenceDelegator
         }
         catch (Exception exception)
         {
-            exception.printStackTrace();
-            throw new PersistenceException(exception);
+            throw new PersistenceException("RowKey: " + primaryKey, exception);
         }
     }
 

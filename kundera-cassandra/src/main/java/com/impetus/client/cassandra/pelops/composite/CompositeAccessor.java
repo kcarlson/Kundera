@@ -11,25 +11,24 @@
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
  ******************************************************************************/
-package com.impetus.kundera.property.accessor;
+package com.impetus.client.cassandra.pelops.composite;
 
 import com.impetus.kundera.property.PropertyAccessException;
-import com.impetus.kundera.property.PropertyAccessor;
-import com.impetus.kundera.property.complex.Composite;
+import java.lang.reflect.Field;
 
 /**
  *
  * @author kcarlson
  */
-public class CompositeAccessor implements PropertyAccessor<Composite>
+public class CompositeAccessor
 {
 
-    @Override
-    public Composite fromBytes(byte[] bytes) throws PropertyAccessException
+    
+    public Composite fromBytes(byte[] bytes, Field field) throws PropertyAccessException
     {
         try
         {
-            return new Composite(bytes);
+            return Composite.parse(bytes, field);
         }
         catch (Exception e)
         {
@@ -37,7 +36,7 @@ public class CompositeAccessor implements PropertyAccessor<Composite>
         }
     }
 
-    @Override
+    
     public byte[] toBytes(Object object) throws PropertyAccessException
     {
         try
@@ -51,13 +50,13 @@ public class CompositeAccessor implements PropertyAccessor<Composite>
         }
     }
 
-    @Override
+    
     public String toString(Object object)
     {
         return ((Composite) object).toString();
     }
 
-    @Override
+    
     public Composite fromString(String s) throws PropertyAccessException
     {
         try

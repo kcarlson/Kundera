@@ -16,6 +16,7 @@
 
 package com.impetus.client.cassandra.pelops;
 
+import com.impetus.client.cassandra.pelops.property.CassPropertyAccessorHelper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -52,7 +53,6 @@ import com.impetus.kundera.persistence.EntityReader;
 import com.impetus.kundera.persistence.handler.impl.EntitySaveGraph;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessorFactory;
-import com.impetus.kundera.property.PropertyAccessorHelper;
 import com.impetus.kundera.proxy.EnhancedEntity;
 
 /**
@@ -141,7 +141,7 @@ public class PelopsClient implements Client
         }
         catch (Exception e)
         {
-            log.error("Error on retrieval" + e.getMessage(), e);
+            log.error("Error on retrieval " + e.getMessage(), e);
             throw new PersistenceException(e.getMessage());
         }
 
@@ -481,7 +481,7 @@ public class PelopsClient implements Client
         String childId = null;
         try
         {
-            childId = PropertyAccessorHelper.getId(child, relMetadata);
+            childId = CassPropertyAccessorHelper.getId(child, relMetadata);
             Column col = new Column();
             col.setName(PropertyAccessorFactory.STRING.toBytes(inverseJoinColumnName + "_" + childId));
             col.setValue(PropertyAccessorFactory.STRING.toBytes(childId));
@@ -621,7 +621,7 @@ public class PelopsClient implements Client
             {
                 try
                 {
-                    String rowKeyStr = ByteUtils.bytesToString(rowKey);
+                    String rowKeyStr = ByteUtils.bytesToString(rowKey, m.getIdColumn().getField());
                     Object e = dataHandler.fromColumnThriftRow(m.getEntityClazz(), m, dataHandler.new ThriftRow(
                             rowKeyStr, m.getTableName(), columns, null), relationNames, isRelational);
                     entities.add(e);

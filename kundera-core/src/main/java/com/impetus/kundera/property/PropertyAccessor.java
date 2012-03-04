@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.kundera.property;
 
+import com.impetus.kundera.metadata.model.EntityMetadata;
 import java.lang.reflect.Field;
 
 /**

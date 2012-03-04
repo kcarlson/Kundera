@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.impetus.client.cassandra.pelops;
 
+import com.impetus.client.cassandra.pelops.property.CassPropertyAccessorHelper;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -47,7 +48,6 @@ import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.metadata.model.Relation;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessorFactory;
-import com.impetus.kundera.property.PropertyAccessorHelper;
 import javax.persistence.PersistenceException;
 
 /**
@@ -98,8 +98,9 @@ public class PelopsDataHandler extends DataHandler
 
         if (!superColumnNames.isEmpty())
         {
-            List<SuperColumn> thriftSuperColumns = selector.getSuperColumnsFromRow(m.getTableName(), rowKey, Selector
-                    .newColumnsPredicateAll(true, 10000), ConsistencyLevel.ONE);
+            Bytes rowKeyBytes = ByteUtils.stringToBytes(rowKey);
+            List<SuperColumn> thriftSuperColumns = selector.getSuperColumnsFromRow(m.getTableName(), rowKeyBytes,
+                    Selector.newColumnsPredicateAll(true, 10000), ConsistencyLevel.ONE);
             e = fromSuperColumnThriftRow(clazz, m, new ThriftRow(rowKey, m.getTableName(), null, thriftSuperColumns),
                     relationNames, isWrapReq);
 
@@ -187,7 +188,7 @@ public class PelopsDataHandler extends DataHandler
         E e = null;
 
         // Set row-key. Note:
-        // PropertyAccessorHelper.setId(e, m, tr.getId());
+        // CassPropertyAccessorHelper.setId(e, m, tr.getId());
 
         // Get a name->field map for super-columns
         Map<String, Field> columnNameToFieldMap = new HashMap<String, Field>();
@@ -206,7 +207,7 @@ public class PelopsDataHandler extends DataHandler
                 e = clazz.newInstance();
 
                 // Set row-key. Note:
-                PropertyAccessorHelper.setId(e, m, tr.getId());
+                CassPropertyAccessorHelper.setId(e, m, tr.getId());
             }
 
             String scName = PropertyAccessorFactory.STRING.fromBytes(sc.getName());
@@ -221,7 +222,7 @@ public class PelopsDataHandler extends DataHandler
                 Object embeddedObject = populateEmbeddedObject(sc, m);
 
                 embeddedCollection.add(embeddedObject);
-                PropertyAccessorHelper.set(e, embeddedCollectionField, embeddedCollection);
+                CassPropertyAccessorHelper.set(e, embeddedCollectionField, embeddedCollection);
             }
             else
             {
@@ -252,9 +253,9 @@ public class PelopsDataHandler extends DataHandler
                     {
                         // set value of the field in the bean
                         Field field = columnNameToFieldMap.get(name);
-                        Object embeddedObject = PropertyAccessorHelper.getObject(e, scName);
+                        Object embeddedObject = CassPropertyAccessorHelper.getObject(e, scName);
 
-                        PropertyAccessorHelper.set(embeddedObject, field, value);
+                        CassPropertyAccessorHelper.set(embeddedObject, field, value);
                     }
                 }
             }
@@ -282,8 +283,8 @@ public class PelopsDataHandler extends DataHandler
         Map<String, Object> relations = new HashMap<String, Object>();
 
         // Set row-key.
-        // PropertyAccessorHelper.setId(entity, m, thriftRow.getId());
-        // PropertyAccessorHelper.set(entity, m.getIdColumn().getField(),
+        // CassPropertyAccessorHelper.setId(entity, m, thriftRow.getId());
+        // CassPropertyAccessorHelper.set(entity, m.getIdColumn().getField(),
         // thriftRow.getId());
 
         // Iterate through each column
@@ -293,7 +294,7 @@ public class PelopsDataHandler extends DataHandler
             {
                 entity = clazz.newInstance();
                 // Set row-key
-                PropertyAccessorHelper.setId(entity, m, thriftRow.getId().toString());
+                CassPropertyAccessorHelper.setId(entity, m, thriftRow.getId().toString());
             }
 
             String thriftColumnName = PropertyAccessorFactory.STRING.fromBytes(c.getName());
@@ -311,7 +312,7 @@ public class PelopsDataHandler extends DataHandler
             {
                 try
                 {
-                    PropertyAccessorHelper.set(entity, column.getField(), thriftColumnValue);
+                    CassPropertyAccessorHelper.set(entity, column.getField(), thriftColumnValue);
                 }
                 catch (PropertyAccessException pae)
                 {
@@ -370,7 +371,7 @@ public class PelopsDataHandler extends DataHandler
             {
                 entity = clazz.newInstance();
                 // Set row-key
-                PropertyAccessorHelper.setId(entity, m, tr.getId().toString());
+                CassPropertyAccessorHelper.setId(entity, m, tr.getId().toString());
             }
             String scName = PropertyAccessorFactory.STRING.fromBytes(sc.getName());
             String scNamePrefix = null;
@@ -401,7 +402,7 @@ public class PelopsDataHandler extends DataHandler
                     Field columnField = columnNameToFieldMap.get(name);
                     if (columnField != null)
                     {
-                        PropertyAccessorHelper.set(embeddedObject, columnField, value);
+                        CassPropertyAccessorHelper.set(embeddedObject, columnField, value);
                     }
                     else if (relationNames != null && !relationNames.isEmpty() && relationNames.contains(name))
                     {
@@ -437,7 +438,7 @@ public class PelopsDataHandler extends DataHandler
                         {
                             try
                             {
-                                PropertyAccessorHelper.set(superColumnObj, columnField, value);
+                                CassPropertyAccessorHelper.set(superColumnObj, columnField, value);
                             }
                             catch (PropertyAccessException e)
                             {
@@ -464,7 +465,7 @@ public class PelopsDataHandler extends DataHandler
 
                 if (superColumnField != null)
                 {
-                    PropertyAccessorHelper.set(entity, superColumnField, superColumnObj);
+                    CassPropertyAccessorHelper.set(entity, superColumnField, superColumnObj);
                 }
 
             }
@@ -472,7 +473,7 @@ public class PelopsDataHandler extends DataHandler
 
         if ((embeddedCollection != null) && !embeddedCollection.isEmpty())
         {
-            PropertyAccessorHelper.set(entity, embeddedCollectionField, embeddedCollection);
+            CassPropertyAccessorHelper.set(entity, embeddedCollectionField, embeddedCollection);
         }
 
         // EnhancedEntity e = EntityResolver.getEnhancedEntity(entity,
@@ -513,7 +514,7 @@ public class PelopsDataHandler extends DataHandler
 
             embeddedCollectionField = superColumnNameToFieldMap.get(scNamePrefix);
 
-            Class<?> embeddedClass = PropertyAccessorHelper.getGenericClass(embeddedCollectionField);
+            Class<?> embeddedClass = CassPropertyAccessorHelper.getGenericClass(embeddedCollectionField);
 
             // must have a default no-argument constructor
             try
@@ -540,7 +541,7 @@ public class PelopsDataHandler extends DataHandler
 
                 Field columnField = columnNameToFieldMap.get(name);
 
-                PropertyAccessorHelper.set(embeddedObject, columnField, value);
+                CassPropertyAccessorHelper.set(embeddedObject, columnField, value);
             }
         }
         else
@@ -563,7 +564,7 @@ public class PelopsDataHandler extends DataHandler
                 // set value of the field in the bean
                 Field columnField = columnNameToFieldMap.get(name);
 
-                PropertyAccessorHelper.set(embeddedObject, columnField, value);
+                CassPropertyAccessorHelper.set(embeddedObject, columnField, value);
             }
         }
 
@@ -633,7 +634,7 @@ public class PelopsDataHandler extends DataHandler
                 String name = column.getName();
                 try
                 {
-                    byte[] value = PropertyAccessorHelper.get(e, field);
+                    byte[] value = CassPropertyAccessorHelper.get(e, field);
                     Column col = new Column();
                     col.setName(PropertyAccessorFactory.STRING.toBytes(name));
                     col.setValue(value);
@@ -668,7 +669,7 @@ public class PelopsDataHandler extends DataHandler
         for (EmbeddedColumn superColumn : m.getEmbeddedColumnsAsList())
         {
             Field superColumnField = superColumn.getField();
-            Object superColumnObject = PropertyAccessorHelper.getObject(e, superColumnField);
+            Object superColumnObject = CassPropertyAccessorHelper.getObject(e, superColumnField);
 
             // If Embedded object is a Collection, there will be variable number
             // of super columns one for each object in collection.
@@ -763,7 +764,7 @@ public class PelopsDataHandler extends DataHandler
 
             try
             {
-                value = PropertyAccessorHelper.get(superColumnObject, field);
+                value = CassPropertyAccessorHelper.get(superColumnObject, field);
             }
             catch (PropertyAccessException exp)
             {

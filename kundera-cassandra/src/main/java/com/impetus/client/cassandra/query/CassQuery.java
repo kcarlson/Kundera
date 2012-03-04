@@ -33,6 +33,7 @@ import org.scale7.cassandra.pelops.Bytes;
 import org.scale7.cassandra.pelops.Selector;
 
 import com.impetus.client.cassandra.pelops.PelopsClient;
+import com.impetus.client.cassandra.pelops.composite.Composite;
 import com.impetus.kundera.client.Client;
 import com.impetus.kundera.client.EnhanceEntity;
 import com.impetus.kundera.metadata.MetadataUtils;
@@ -47,7 +48,7 @@ import com.impetus.kundera.query.QueryImpl;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.accessor.DateAccessor;
-import com.impetus.kundera.property.complex.Composite;
+
 import java.util.*;
 
 /**

@@ -16,7 +16,6 @@
 package com.impetus.kundera.property;
 
 import com.impetus.kundera.property.accessor.*;
-import com.impetus.kundera.property.complex.Composite;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -82,10 +81,6 @@ public class PropertyAccessorFactory
 
         // UUID class Accessor
         map.put(UUID.class, new UuidAccessor());
-
-        // Composite class Accessor
-        map.put(Composite.class, new CompositeAccessor());
-
     }
 
     /** Making String Accessor easy to access. */

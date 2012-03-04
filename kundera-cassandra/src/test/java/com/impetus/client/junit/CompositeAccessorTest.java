@@ -2,10 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.impetus.kundera.property.accessor;
+package com.impetus.client.junit;
 
+import com.impetus.client.cassandra.pelops.composite.Composite;
+import com.impetus.client.cassandra.pelops.composite.CompositeAccessor;
 import com.impetus.kundera.property.PropertyAccessException;
-import com.impetus.kundera.property.complex.Composite;
 import java.util.UUID;
 import org.junit.*;
 
@@ -47,7 +48,8 @@ public class CompositeAccessorTest
         UUID id = UUID.randomUUID();
         Long l = 1L;
 
-        Composite composite1 = new Composite(id, l);
+        Composite composite1 = new Composite();
+        composite1.addUuid(id).addLong(l);
 
         CompositeAccessor accessor = new CompositeAccessor();
 
