@@ -57,5 +57,11 @@ public class CompositeAccessorTest
 
         assert composite1.equals(composite2);
 
+        byte[] bytes = accessor.toBytes(composite1);
+
+        Composite composite3 = accessor.fromBytes(bytes);
+
+        assert composite1.equals(composite3);
+
     }
 }
