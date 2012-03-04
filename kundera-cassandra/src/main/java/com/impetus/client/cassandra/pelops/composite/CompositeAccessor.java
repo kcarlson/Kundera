@@ -53,11 +53,11 @@ public class CompositeAccessor
         return ((Composite) object).toString();
     }
 
-    public Composite fromString(String s) throws PropertyAccessException
+    public Composite fromString(String s, Field field) throws PropertyAccessException
     {
         try
         {
-            return Composite.fromString(s);
+            return Composite.fromString(s, field);
         }
         catch (Exception e)
         {

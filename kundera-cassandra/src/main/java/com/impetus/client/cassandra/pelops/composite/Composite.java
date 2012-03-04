@@ -17,7 +17,6 @@ import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessor;
 import com.impetus.kundera.property.PropertyAccessorFactory;
 import java.io.Serializable;
-import java.lang.Object;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -28,51 +27,6 @@ import org.scale7.cassandra.pelops.types.CompositeType;
 
 public class Composite implements Serializable
 {
-    /**
-     * Component id for boolean values
-     */
-    public final static int COMPONENT_BOOL = 2;
-
-    /**
-     * Component id for long values
-     */
-    public final static int COMPONENT_LONG = 3;
-
-    /**
-     * Component id for real values
-     */
-    public final static int COMPONENT_REAL = 4;
-
-    /**
-     * Component id for timeuuid values
-     */
-    public final static int COMPONENT_TIMEUUID = 5;
-
-    /**
-     * Component id for lexical uuid values
-     */
-    public final static int COMPONENT_LEXICALUUID = 6;
-
-    /**
-     * Component id for ascii character strings
-     */
-    public final static int COMPONENT_ASCII = 7;
-
-    /**
-     * Component id for utf8 encoded strings
-     */
-    public final static int COMPONENT_UTF8 = 8;
-
-    /**
-     * Component id for byte array values
-     */
-    public final static int COMPONENT_BYTES = 9;
-
-    /**
-     * Component id for place holder matching the maximum possible value.
-     */
-    public final static int COMPONENT_MAXIMUM = 255;
-
     static final Logger logger = Logger.getLogger(Composite.class.getName());
 
     private List<Object> parts;
@@ -91,54 +45,20 @@ public class Composite implements Serializable
     @Override
     public String toString()
     {
-        if (parts.isEmpty())
+        Iterator<Object> iter = parts.iterator();
+
+        if (!iter.hasNext())
         {
             return "";
         }
 
-        Iterator<Object> iter = parts.iterator();
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder(String.valueOf(iter.next()));
 
         while (iter.hasNext())
         {
-            Object o = iter.next();
-            sb.append(o.toString());
-            if (o instanceof Long)
-            {
-                sb.append(";").append(COMPONENT_LONG);
-            }
-            else if (o instanceof Integer)
-            {
-                sb.append(";").append(COMPONENT_LONG);
-            }
-            else if (o instanceof Double)
-            {
-                sb.append(";").append(COMPONENT_REAL);
-            }
-            else if (o instanceof Float)
-            {
-                sb.append(";").append(COMPONENT_REAL);
-            }
-            else if (o instanceof Boolean)
-            {
-                sb.append(";").append(COMPONENT_BOOL);
-            }
-            else if (o instanceof String)
-            {
-                sb.append(";").append(COMPONENT_UTF8);
-            }
-            else if (o instanceof UUID)
-            {
-                sb.append(";").append(COMPONENT_LEXICALUUID);
-            }
-            else if (o instanceof byte[])
-            {
-                sb.append(";").append(COMPONENT_BYTES);
-            }
-
-            sb.append(",");
+            sb.append(":").append(String.valueOf(iter.next()));
         }
-        return sb.toString().substring(0, sb.length() - 1);
+        return sb.toString();//.substring(0, sb.length() - 1);
     }
 
     public static Composite fromObjects(Object... parts)
@@ -183,65 +103,63 @@ public class Composite implements Serializable
         return composite;
     }
 
-    public static Composite fromString(String s)
+    public static Composite fromString(String s, Field field)
     {
-        StringTokenizer st = new StringTokenizer(s, ",");
         Composite composite = new Composite();
+        String[] compositeParts = s.split(":");
+        Class[] compositeTypes = getCompositeFieldTypes(field);
 
-        while (st.hasMoreTokens())
+        if (compositeParts.length != compositeTypes.length)
         {
-            String token = st.nextToken();
-            String[] subTokens = token.split(";");
+            throw new MarshalException("Supplied byte array did not parse correctly "
+                    + "or composite field not annotated correctly.");
+        }
 
-            if (subTokens.length != 2)
+        for (int i = 0; i < compositeParts.length; i++)
+        {
+            try
             {
-                throw new MarshalException("Not a string-serialized composite type: " + s);
+                String part = compositeParts[i];
+                Class cl = compositeTypes[i];
+                PropertyAccessor accessor = PropertyAccessorFactory.getPropertyAccessor(cl);
+                Object value = accessor.fromString(part);
+
+                if (cl.equals(Long.class))
+                {
+                    composite.addLong((Long) value);
+                }
+                else if (cl.equals(Integer.class))
+                {
+                    composite.addInt((Integer) value);
+                }
+                else if (cl.equals(Double.class))
+                {
+                    composite.addDouble((Double) value);
+                }
+                else if (cl.equals(Float.class))
+                {
+                    composite.addFloat((Float) value);
+                }
+                else if (cl.equals(Boolean.class))
+                {
+                    composite.addBoolean((Boolean) value);
+                }
+                else if (cl.equals(String.class))
+                {
+                    composite.addUTF8((String) value);
+                }
+                else if (cl.equals(UUID.class))
+                {
+                    composite.addUuid((UUID) value);
+                }
+                else if (cl.equals(byte[].class))
+                {
+                    composite.addByteArray((byte[]) value);
+                }
             }
-
-            token = subTokens[0];
-            int type = Integer.parseInt(subTokens[1]);
-
-            switch (type)
+            catch (PropertyAccessException ex)
             {
-            case COMPONENT_BYTES:
-                byte b = Byte.decode(token);
-                composite.addByte(b);
-                break;
-            case COMPONENT_ASCII:
-                composite.addUTF8(token);
-                break;
-
-            case COMPONENT_UTF8:
-                composite.addUTF8(token);
-                break;
-
-            case COMPONENT_BOOL:
-                boolean bool = Boolean.parseBoolean(token);
-                composite.addBoolean(bool);
-                break;
-
-            case COMPONENT_LONG:
-                long lng = Long.parseLong(token);
-                composite.addLong(lng);
-                break;
-
-            case COMPONENT_REAL:
-                double dbl = Double.parseDouble(token);
-                composite.addDouble(dbl);
-                break;
-
-            case COMPONENT_LEXICALUUID:
-                UUID lexicalUuid = UUID.fromString(token);
-                composite.addUuid(lexicalUuid);
-                break;
-
-            case COMPONENT_TIMEUUID:
-                UUID timeUuid = UUID.fromString(token);
-                composite.addUuid(timeUuid);
-                break;
-
-            default:
-                throw new MarshalException("Unknown embedded type: " + type);
+                Logger.getLogger(Composite.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

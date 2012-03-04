@@ -42,7 +42,7 @@ public class ByteUtils
      * @param str
      * @return 
      */
-    public static Bytes stringToBytes(String str)
+    public static Bytes stringToBytes(String str, Field field)
     {
         try
         {
@@ -53,7 +53,7 @@ public class ByteUtils
         {
             try
             {
-                Composite composite = Composite.fromString(str);
+                Composite composite = Composite.fromString(str, field);
                 return Bytes.fromByteBuffer(composite.serializeToByteBuffer());
             }
             catch (MarshalException ex2)
@@ -115,7 +115,7 @@ public class ByteUtils
      * @return
      * @throws Exception 
      */
-    public static byte[] stringToByteArray(String str) throws Exception
+    public static byte[] stringToByteArray(String str, Field field) throws Exception
     {
         try
         {
@@ -126,7 +126,7 @@ public class ByteUtils
         {
             try
             {
-                Composite composite = Composite.fromString(str);
+                Composite composite = Composite.fromString(str, field);
                 return composite.serialize();
             }
             catch (MarshalException ex2)
@@ -150,7 +150,7 @@ public class ByteUtils
      * @param str
      * @return 
      */
-    public static ByteBuffer stringToByteBuffer(String str)
+    public static ByteBuffer stringToByteBuffer(String str, Field field)
     {
         try
         {
@@ -161,7 +161,7 @@ public class ByteUtils
         {
             try
             {
-                Composite composite = Composite.fromString(str);
+                Composite composite = Composite.fromString(str, field);
                 return composite.serializeToByteBuffer();
             }
             catch (MarshalException ex2)

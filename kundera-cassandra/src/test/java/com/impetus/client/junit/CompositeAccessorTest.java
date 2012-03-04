@@ -54,20 +54,20 @@ public class CompositeAccessorTest
         Composite composite1 = new Composite();
         composite1.addUuid(id).addLong(l);
 
-        CompositeAccessor accessor = new CompositeAccessor();
-
-        String string = accessor.toString(composite1);
-
-        Composite composite2 = accessor.fromString(string);
-
-        assert Arrays.equals(composite1.serialize(), composite2.serialize());
-
-        byte[] bytes = accessor.toBytes(composite1);
-
         TestEntity entity = new TestEntity();
         entity.composite = composite1;
 
         Field field = entity.getClass().getDeclaredField("composite");
+
+        CompositeAccessor accessor = new CompositeAccessor();
+
+        String string = accessor.toString(composite1);
+
+        Composite composite2 = accessor.fromString(string, field);
+
+        assert Arrays.equals(composite1.serialize(), composite2.serialize());
+
+        byte[] bytes = accessor.toBytes(composite1);
 
         Composite composite3 = accessor.fromBytes(bytes, field);
 

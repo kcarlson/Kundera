@@ -342,7 +342,7 @@ public class CassQuery extends QueryImpl implements Query
             }
             else if (f.getType().equals(Composite.class) || f.getType().isAssignableFrom(Composite.class))
             {
-                Composite composite = Composite.fromString(value);
+                Composite composite = Composite.fromString(value, f);
                 return Bytes.fromByteBuffer(composite.serializeToByteBuffer());
             }
             else if (f.getType().equals(Date.class) || f.getType().isAssignableFrom(Date.class))

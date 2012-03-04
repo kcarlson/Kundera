@@ -98,7 +98,7 @@ public class PelopsDataHandler extends DataHandler
 
         if (!superColumnNames.isEmpty())
         {
-            Bytes rowKeyBytes = ByteUtils.stringToBytes(rowKey);
+            Bytes rowKeyBytes = ByteUtils.stringToBytes(rowKey, m.getIdColumn().getField());
             List<SuperColumn> thriftSuperColumns = selector.getSuperColumnsFromRow(m.getTableName(), rowKeyBytes,
                     Selector.newColumnsPredicateAll(true, 10000), ConsistencyLevel.ONE);
             e = fromSuperColumnThriftRow(clazz, m, new ThriftRow(rowKey, m.getTableName(), null, thriftSuperColumns),
@@ -109,7 +109,7 @@ public class PelopsDataHandler extends DataHandler
         {
 
             List<ByteBuffer> rowKeys = new ArrayList<ByteBuffer>(1);
-            ByteBuffer rKeyAsByte = ByteUtils.stringToByteBuffer(rowKey);
+            ByteBuffer rKeyAsByte = ByteUtils.stringToByteBuffer(rowKey, m.getIdColumn().getField());
             rowKeys.add(rKeyAsByte);
 
             Map<ByteBuffer, List<ColumnOrSuperColumn>> columnOrSuperColumnsFromRow = selector
