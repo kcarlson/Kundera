@@ -294,7 +294,9 @@ public class Composite implements Collection<Object>, Comparable<Composite>
         {
             return "";
         }
-        StringBuilder builder = new StringBuilder(stringValueOf(iter.next()));
+        //rewind
+        iter = iterator();
+        StringBuilder builder = new StringBuilder();
         while (iter.hasNext())
         {
             Object o = iter.next();
@@ -351,9 +353,15 @@ public class Composite implements Collection<Object>, Comparable<Composite>
         {
             String token = st.nextToken();
             String[] subTokens = token.split(";");
+
+            if (subTokens.length != 2)
+            {
+                throw new MarshalException("Not a string-serialized composite type: " + s);
+            }
+
             token = subTokens[0];
             int type = Integer.parseInt(subTokens[1]);
-            
+
             switch (type)
             {
             case COMPONENT_BYTES:

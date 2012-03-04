@@ -55,7 +55,7 @@ public class CompositeAccessorTest
 
         Composite composite2 = accessor.fromString(string);
 
-        assert composite1 == composite2;
+        assert composite1.equals(composite2);
 
     }
 }
