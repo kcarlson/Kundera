@@ -16,6 +16,7 @@ package com.impetus.client.cassandra.pelops.composite;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.PropertyAccessor;
 import com.impetus.kundera.property.PropertyAccessorFactory;
+import java.io.Serializable;
 import java.lang.Object;
 import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
 import org.scale7.cassandra.pelops.Bytes;
 import org.scale7.cassandra.pelops.types.CompositeType;
 
-public class Composite
+public class Composite implements Serializable
 {
     /**
      * Component id for boolean values
@@ -87,37 +88,6 @@ public class Composite
         parts = new ArrayList<Object>();
     }
 
-    /**
-     * @param bytes
-     
-    public Composite(byte[] bytes)
-    {
-        this.bytes = bytes;
-    }
-
-    public Composite(ByteBuffer buffer)
-    {
-        bytes = buffer.array();
-        startOffset = buffer.arrayOffset() + buffer.position();
-    }
-
-    public Composite(Object... objects)
-    {
-        for (Object obj : objects)
-        {
-            add(obj);
-        }
-    }
-     * 
-    public Composite(List<Object> objects)
-    {
-        for (Object obj : objects)
-        {
-            add(obj);
-        }
-    }
-     */
-
     @Override
     public String toString()
     {
@@ -169,6 +139,48 @@ public class Composite
             sb.append(",");
         }
         return sb.toString().substring(0, sb.length() - 1);
+    }
+
+    public static Composite fromObjects(Object... parts)
+    {
+        Composite composite = new Composite();
+        for (Object o : parts)
+        {
+            if (o instanceof Long)
+            {
+                composite.addLong((Long) o);
+            }
+            else if (o instanceof Integer)
+            {
+                composite.addInt((Integer) o);
+            }
+            else if (o instanceof Double)
+            {
+                composite.addDouble((Double) o);
+            }
+            else if (o instanceof Float)
+            {
+                composite.addFloat((Float) o);
+            }
+            else if (o instanceof Boolean)
+            {
+                composite.addBoolean((Boolean) o);
+            }
+            else if (o instanceof String)
+            {
+                composite.addUTF8((String) o);
+            }
+            else if (o instanceof UUID)
+            {
+                composite.addUuid((UUID) o);
+            }
+            else if (o instanceof byte[])
+            {
+                composite.addByteArray((byte[]) o);
+            }
+        }
+
+        return composite;
     }
 
     public static Composite fromString(String s)
@@ -481,5 +493,15 @@ public class Composite
         com.impetus.client.cassandra.pelops.composite.CompositeType ct = field
                 .getAnnotation(com.impetus.client.cassandra.pelops.composite.CompositeType.class);
         return ct.parts();
+    }
+
+    public Iterator<Object> iterator()
+    {
+        return parts.iterator();
+    }
+
+    public List<Object> parts()
+    {
+        return parts;
     }
 }

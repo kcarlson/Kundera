@@ -119,7 +119,7 @@ public class ClasspathReader extends Reader
 
         try
         {
-            return new URL[] { f.getParentFile().getParentFile().toURI().toURL() };
+            return new URL[] { f.getParentFile().getParentFile().getParentFile().toURI().toURL() };
         }
         catch (MalformedURLException ex)
         {
