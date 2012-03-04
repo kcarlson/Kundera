@@ -31,7 +31,6 @@ import com.impetus.kundera.persistence.event.CallbackMethod;
  */
 public final class EntityMetadata
 {
-
     /*
      * Entity related metadata properties
      */

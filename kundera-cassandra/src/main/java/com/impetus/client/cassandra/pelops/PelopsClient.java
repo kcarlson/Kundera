@@ -406,7 +406,6 @@ public class PelopsClient implements Client
 
         Mutator mutator = Pelops.createMutator(PelopsUtils.generatePoolName(getPersistenceUnit()));
 
-        String parentId = (String) primaryKey;
         List<Column> columns = new ArrayList<Column>();
 
         if (Collection.class.isAssignableFrom(childEntity.getClass()))
@@ -425,8 +424,9 @@ public class PelopsClient implements Client
             addColumnsToJoinTable(inverseJoinColumnName, relMetadata, columns, childEntity);
         }
 
-        mutator.writeColumns(joinTableName, new Bytes(parentId.getBytes()), Arrays.asList(columns
-                .toArray(new Column[0])));
+        Bytes keyBytes = ByteUtils.objectToBytes(primaryKey, relMetadata);
+
+        mutator.writeColumns(joinTableName, keyBytes, Arrays.asList(columns.toArray(new Column[0])));
         mutator.execute(ConsistencyLevel.ONE);
     }
 
@@ -439,8 +439,10 @@ public class PelopsClient implements Client
     {
         String parentId = objectGraph.getParentId();
         Selector selector = Pelops.createSelector(PelopsUtils.generatePoolName(getPersistenceUnit()));
-        List<Column> columns = selector.getColumnsFromRow(joinTableName, new Bytes(parentId.getBytes()), Selector
-                .newColumnsPredicateAll(true, 10), ConsistencyLevel.ONE);
+        Bytes keyBytes = ByteUtils.stringToBytes(parentId);
+
+        List<Column> columns = selector.getColumnsFromRow(joinTableName, keyBytes, Selector.newColumnsPredicateAll(
+                true, 10), ConsistencyLevel.ONE);
 
         PelopsDataHandler handler = new PelopsDataHandler(this);
         List<E> foreignKeys = handler.getForeignKeysFromJoinTable(inverseJoinColumnName, columns);
@@ -802,7 +804,7 @@ public class PelopsClient implements Client
         List<SuperColumn> thriftSuperColumns = tf.getSuperColumns();
         if (thriftColumns != null && !thriftColumns.isEmpty())
         {
-            Bytes keyBytes = ByteUtils.stringToBytes(tf.getId());
+            Bytes keyBytes = ByteUtils.objectToBytes(tf.getId(), metadata);
             mutator.writeColumns(metadata.getTableName(), keyBytes, Arrays.asList(tf.getColumns()
                     .toArray(new Column[0])));
         }
@@ -811,7 +813,9 @@ public class PelopsClient implements Client
         {
             for (SuperColumn sc : thriftSuperColumns)
             {
-                mutator.writeSubColumns(metadata.getTableName(), tf.getId(), ByteUtils.byteArrayToString(sc.getName()),
+                Bytes keyBytes = ByteUtils.objectToBytes(tf.getId(), metadata);
+                mutator.writeSubColumns(
+                        metadata.getTableName(), keyBytes, Bytes.fromByteArray(sc.getName()),
                         sc.getColumns());
 
             }

@@ -15,11 +15,16 @@
 package com.impetus.client.cassandra.pelops;
 
 import com.impetus.kundera.Constants;
+import com.impetus.kundera.metadata.model.EntityMetadata;
+import com.impetus.kundera.property.PropertyAccessException;
+import com.impetus.kundera.property.complex.CompositeKey;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 import org.scale7.cassandra.pelops.Bytes;
 import org.apache.cassandra.utils.ByteBufferUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * All methods in this utilities class take UUIDs into consideration when
@@ -28,6 +33,8 @@ import org.apache.cassandra.utils.ByteBufferUtil;
  */
 public class ByteUtils
 {
+    /** log for this class. */
+    private static Log log = LogFactory.getLog(ByteUtils.class);
 
     /**
      * Converts a string to a Bytes object taking into consideration that the
@@ -128,6 +135,29 @@ public class ByteUtils
         catch (IllegalArgumentException ex)
         {
             return ByteBufferUtil.bytes(str);
+        }
+    }
+
+    public static Bytes objectToBytes(Object primaryKey, EntityMetadata entityMetadata)
+    {
+        if (primaryKey instanceof CompositeKey)
+        {
+            try
+            {
+                byte[] bytes = CompositeKey.fromString((String) primaryKey, entityMetadata).toByteArray();
+
+                return Bytes.fromByteArray(bytes);
+            }
+            catch (PropertyAccessException ex)
+            {
+                log.fatal(null, ex);
+                //TODO: Throw something!
+                return null;
+            }
+        }
+        else
+        {
+            return stringToBytes((String) primaryKey);
         }
     }
 }

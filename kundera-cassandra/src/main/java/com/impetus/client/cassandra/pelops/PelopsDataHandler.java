@@ -293,7 +293,7 @@ public class PelopsDataHandler extends DataHandler
             {
                 entity = clazz.newInstance();
                 // Set row-key
-                PropertyAccessorHelper.setId(entity, m, thriftRow.getId());
+                PropertyAccessorHelper.setId(entity, m, thriftRow.getId().toString());
             }
 
             String thriftColumnName = PropertyAccessorFactory.STRING.fromBytes(c.getName());
@@ -329,7 +329,7 @@ public class PelopsDataHandler extends DataHandler
                 }
             }
         }
-        return isWrapperReq ? new EnhanceEntity(entity, thriftRow.getId(), relations) : entity;
+        return isWrapperReq ? new EnhanceEntity(entity, thriftRow.getId().toString(), relations) : entity;
     }
 
     /**
@@ -370,7 +370,7 @@ public class PelopsDataHandler extends DataHandler
             {
                 entity = clazz.newInstance();
                 // Set row-key
-                PropertyAccessorHelper.setId(entity, m, tr.getId());
+                PropertyAccessorHelper.setId(entity, m, tr.getId().toString());
             }
             String scName = PropertyAccessorFactory.STRING.fromBytes(sc.getName());
             String scNamePrefix = null;
@@ -413,7 +413,7 @@ public class PelopsDataHandler extends DataHandler
                 embeddedCollection.add(embeddedObject);
 
                 // Add this embedded object to cache
-                ElementCollectionCacheManager.getInstance().addElementCollectionCacheMapping(tr.getId(),
+                ElementCollectionCacheManager.getInstance().addElementCollectionCacheMapping(tr.getId().toString(),
                         embeddedObject, scName);
             }
             else
@@ -477,7 +477,7 @@ public class PelopsDataHandler extends DataHandler
 
         // EnhancedEntity e = EntityResolver.getEnhancedEntity(entity,
         // tr.getId(), foreignKeysMap);
-        return isWrapReq ? new EnhanceEntity(entity, tr.getId(), relations) : entity;
+        return isWrapReq ? new EnhanceEntity(entity, tr.getId().toString(), relations) : entity;
     }
 
     /**
@@ -854,7 +854,7 @@ public class PelopsDataHandler extends DataHandler
         private List<Column> columns;
 
         /** Id of the row. */
-        private String id;
+        private Object id;
 
         /** list of thrift super columns columns from the row. */
         private List<SuperColumn> superColumns;
@@ -880,7 +880,7 @@ public class PelopsDataHandler extends DataHandler
          * @param superColumns
          *            the super columns
          */
-        public ThriftRow(String id, String columnFamilyName, List<Column> columns, List<SuperColumn> superColumns)
+        public ThriftRow(Object id, String columnFamilyName, List<Column> columns, List<SuperColumn> superColumns)
         {
             this.id = id;
             this.columnFamilyName = columnFamilyName;
@@ -901,7 +901,7 @@ public class PelopsDataHandler extends DataHandler
          *
          * @return the id
          */
-        public String getId()
+        public Object getId()
         {
             return id;
         }
@@ -912,7 +912,7 @@ public class PelopsDataHandler extends DataHandler
          * @param id
          *            the key to set
          */
-        public void setId(String id)
+        public void setId(Object id)
         {
             this.id = id;
         }
