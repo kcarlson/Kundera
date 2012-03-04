@@ -48,7 +48,6 @@ import com.impetus.kundera.query.QueryImpl;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.accessor.DateAccessor;
-
 import java.util.*;
 
 /**
