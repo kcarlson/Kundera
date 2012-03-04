@@ -72,18 +72,18 @@ public class Composite
      */
     public final static int COMPONENT_MAXIMUM = 255;
 
-
     static final Logger logger = Logger.getLogger(Composite.class.getName());
 
     private List<Object> parts;
-    
+
     private CompositeType.Builder builder;
+
     /**
      * 
      */
     public Composite()
     {
-        builder = CompositeType.Builder.newBuilder(); 
+        builder = CompositeType.Builder.newBuilder();
         parts = new ArrayList<Object>();
     }
 
@@ -108,7 +108,7 @@ public class Composite
             add(obj);
         }
     }
-    * 
+     * 
     public Composite(List<Object> objects)
     {
         for (Object obj : objects)
@@ -116,7 +116,7 @@ public class Composite
             add(obj);
         }
     }
-    */
+     */
 
     @Override
     public String toString()
@@ -125,10 +125,10 @@ public class Composite
         {
             return "";
         }
-        
+
         Iterator<Object> iter = parts.iterator();
         StringBuilder sb = new StringBuilder();
-        
+
         while (iter.hasNext())
         {
             Object o = iter.next();
@@ -191,50 +191,51 @@ public class Composite
 
             switch (type)
             {
-                case COMPONENT_BYTES:
-                    byte b = Byte.decode(token);
-                    composite.addByte(b);
-                    break;
-                case COMPONENT_ASCII:
-                    composite.addUTF8(token);
-                    break;
+            case COMPONENT_BYTES:
+                byte b = Byte.decode(token);
+                composite.addByte(b);
+                break;
+            case COMPONENT_ASCII:
+                composite.addUTF8(token);
+                break;
 
-                case COMPONENT_UTF8:
-                    composite.addUTF8(token);
-                    break;
+            case COMPONENT_UTF8:
+                composite.addUTF8(token);
+                break;
 
-                case COMPONENT_BOOL:
-                    boolean bool = Boolean.parseBoolean(token);
-                    composite.addBoolean(bool);
-                    break;
+            case COMPONENT_BOOL:
+                boolean bool = Boolean.parseBoolean(token);
+                composite.addBoolean(bool);
+                break;
 
-                case COMPONENT_LONG:
-                    long lng = Long.parseLong(token);
-                    composite.addLong(lng);
-                    break;
+            case COMPONENT_LONG:
+                long lng = Long.parseLong(token);
+                composite.addLong(lng);
+                break;
 
-                case COMPONENT_REAL:
-                    double dbl = Double.parseDouble(token);
-                    composite.addDouble(dbl);
-                    break;
+            case COMPONENT_REAL:
+                double dbl = Double.parseDouble(token);
+                composite.addDouble(dbl);
+                break;
 
-                case COMPONENT_LEXICALUUID:
-                    composite.addUuid(token);
-                    break;
+            case COMPONENT_LEXICALUUID:
+                UUID lexicalUuid = UUID.fromString(token);
+                composite.addUuid(lexicalUuid);
+                break;
 
-                case COMPONENT_TIMEUUID:
-                    composite.addUuid(token);
-                    break;
+            case COMPONENT_TIMEUUID:
+                UUID timeUuid = UUID.fromString(token);
+                composite.addUuid(timeUuid);
+                break;
 
-                default:
-                    throw new MarshalException("Unknown embedded type: " + type);
+            default:
+                throw new MarshalException("Unknown embedded type: " + type);
             }
         }
 
         return composite;
     }
 
-    
     public Composite addBoolean(Boolean value)
     {
         parts.add(value);
@@ -242,7 +243,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addBoolean(boolean value)
     {
         parts.add(value);
@@ -250,7 +250,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addByte(Byte value)
     {
         parts.add(value);
@@ -258,7 +257,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addByte(byte value)
     {
         parts.add(value);
@@ -266,7 +264,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addByteArray(byte[] value)
     {
         parts.add(value);
@@ -274,7 +271,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addByteBuffer(ByteBuffer value)
     {
         parts.add(value);
@@ -282,7 +278,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addBytes(Bytes value)
     {
         parts.add(value);
@@ -290,7 +285,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addChar(Character value)
     {
         parts.add(value);
@@ -298,7 +292,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addChar(char value)
     {
         parts.add(value);
@@ -306,7 +299,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addDouble(Double value)
     {
         parts.add(value);
@@ -314,7 +306,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addDouble(double value)
     {
         parts.add(value);
@@ -322,7 +313,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addFloat(Float value)
     {
         parts.add(value);
@@ -330,7 +320,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addFloat(float value)
     {
         parts.add(value);
@@ -338,7 +327,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addInt(Integer value)
     {
         parts.add(value);
@@ -346,7 +334,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addInt(int value)
     {
         parts.add(value);
@@ -354,7 +341,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addLong(Long value)
     {
         parts.add(value);
@@ -362,7 +348,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addLong(long value)
     {
         parts.add(value);
@@ -370,7 +355,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addShort(Short value)
     {
         parts.add(value);
@@ -378,7 +362,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addShort(short value)
     {
         parts.add(value);
@@ -386,7 +369,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addTimeUuid(com.eaio.uuid.UUID value)
     {
         parts.add(value);
@@ -394,7 +376,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addUTF8(String value)
     {
         parts.add(value);
@@ -402,15 +383,6 @@ public class Composite
         return this;
     }
 
-    
-    public Composite addUuid(String value)
-    {
-        parts.add(value);
-        builder.addUuid(value);
-        return this;
-    }
-
-    
     public Composite addUuid(UUID value)
     {
         parts.add(value);
@@ -418,7 +390,6 @@ public class Composite
         return this;
     }
 
-    
     public Composite addUuid(long msb, long lsb)
     {
         parts.add(new UUID(msb, lsb));
@@ -435,26 +406,26 @@ public class Composite
     {
         return builder.build().getBytes();
     }
-    
+
     public static Composite parse(Bytes bytes, Field field)
     {
         return parse(bytes.toByteArray(), field);
     }
-    
+
     public static Composite parse(byte[] bytes, Field field)
     {
         List<byte[]> ckeyList = CompositeType.parse(bytes);
         Composite composite = new Composite();
-        
+
         Class[] compositeFieldTypes = getCompositeFieldTypes(field);
-        
-        if(ckeyList.size() != compositeFieldTypes.length)
+
+        if (ckeyList.size() != compositeFieldTypes.length)
         {
             throw new MarshalException("Supplied byte array did not parse correctly "
                     + "or composite field not annotated correctly.");
         }
-        
-        for(int i=0;i<ckeyList.size();i++)
+
+        for (int i = 0; i < ckeyList.size(); i++)
         {
             try
             {
@@ -462,38 +433,38 @@ public class Composite
                 Class cl = compositeFieldTypes[i];
                 PropertyAccessor accessor = PropertyAccessorFactory.getPropertyAccessor(cl);
                 Object value = accessor.fromBytes(part);
-                
-                if (cl.getClass().equals(Long.class))
+
+                if (cl.equals(Long.class))
                 {
-                    composite.addLong((Long)value);
+                    composite.addLong((Long) value);
                 }
-                else if (cl.getClass().equals(Integer.class))
+                else if (cl.equals(Integer.class))
                 {
-                    composite.addInt((Integer)value);
+                    composite.addInt((Integer) value);
                 }
-                else if (cl.getClass().equals(Double.class))
+                else if (cl.equals(Double.class))
                 {
-                    composite.addDouble((Double)value);
+                    composite.addDouble((Double) value);
                 }
-                else if (cl.getClass().equals(Float.class))
+                else if (cl.equals(Float.class))
                 {
-                    composite.addFloat((Float)value);
+                    composite.addFloat((Float) value);
                 }
-                else if (cl.getClass().equals(Boolean.class))
+                else if (cl.equals(Boolean.class))
                 {
-                    composite.addBoolean((Boolean)value);
+                    composite.addBoolean((Boolean) value);
                 }
-                else if (cl.getClass().equals(String.class))
+                else if (cl.equals(String.class))
                 {
-                    composite.addUTF8((String)value);
+                    composite.addUTF8((String) value);
                 }
-                else if (cl.getClass().equals(UUID.class))
+                else if (cl.equals(UUID.class))
                 {
-                    composite.addUuid((UUID)value);
+                    composite.addUuid((UUID) value);
                 }
-                else if (cl.getClass().equals(byte[].class))
+                else if (cl.equals(byte[].class))
                 {
-                    composite.addByteArray((byte[])value);
+                    composite.addByteArray((byte[]) value);
                 }
             }
             catch (PropertyAccessException ex)
@@ -501,14 +472,14 @@ public class Composite
                 Logger.getLogger(Composite.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return composite;
     }
 
-    
     private static Class[] getCompositeFieldTypes(Field field)
     {
-        com.impetus.client.cassandra.pelops.composite.CompositeType ct = field.getAnnotation(com.impetus.client.cassandra.pelops.composite.CompositeType.class);
+        com.impetus.client.cassandra.pelops.composite.CompositeType ct = field
+                .getAnnotation(com.impetus.client.cassandra.pelops.composite.CompositeType.class);
         return ct.parts();
     }
 }

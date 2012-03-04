@@ -78,7 +78,7 @@ public class PelopsClientFactory extends GenericClientFactory
                 luceneDirPath));
 
         reader = new CassandraEntityReader();
-        
+
         // Special cassandra composite class accessor
         //PropertyAccessorFactory.map.put(Composite.class, new CompositeAccessor());
 

@@ -6,7 +6,10 @@ package com.impetus.client.junit;
 
 import com.impetus.client.cassandra.pelops.composite.Composite;
 import com.impetus.client.cassandra.pelops.composite.CompositeAccessor;
+import com.impetus.client.cassandra.pelops.composite.CompositeType;
 import com.impetus.kundera.property.PropertyAccessException;
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.UUID;
 import org.junit.*;
 
@@ -42,7 +45,7 @@ public class CompositeAccessorTest
     }
 
     @Test
-    public void test() throws PropertyAccessException
+    public void test() throws PropertyAccessException, NoSuchFieldException
     {
 
         UUID id = UUID.randomUUID();
@@ -57,13 +60,24 @@ public class CompositeAccessorTest
 
         Composite composite2 = accessor.fromString(string);
 
-        assert composite1.equals(composite2);
+        assert Arrays.equals(composite1.serialize(), composite2.serialize());
 
         byte[] bytes = accessor.toBytes(composite1);
 
-        Composite composite3 = accessor.fromBytes(bytes);
+        TestEntity entity = new TestEntity();
+        entity.composite = composite1;
 
-        assert composite1.equals(composite3);
+        Field field = entity.getClass().getDeclaredField("composite");
+
+        Composite composite3 = accessor.fromBytes(bytes, field);
+
+        assert Arrays.equals(composite1.serialize(), composite3.serialize());
 
     }
+}
+
+class TestEntity
+{
+    @CompositeType(parts = { UUID.class, Long.class })
+    Composite composite;
 }

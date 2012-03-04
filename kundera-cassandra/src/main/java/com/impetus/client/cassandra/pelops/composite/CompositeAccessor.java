@@ -23,7 +23,6 @@ import java.lang.reflect.Field;
 public class CompositeAccessor
 {
 
-    
     public Composite fromBytes(byte[] bytes, Field field) throws PropertyAccessException
     {
         try
@@ -36,7 +35,6 @@ public class CompositeAccessor
         }
     }
 
-    
     public byte[] toBytes(Object object) throws PropertyAccessException
     {
         try
@@ -50,13 +48,11 @@ public class CompositeAccessor
         }
     }
 
-    
     public String toString(Object object)
     {
         return ((Composite) object).toString();
     }
 
-    
     public Composite fromString(String s) throws PropertyAccessException
     {
         try

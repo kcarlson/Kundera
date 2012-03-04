@@ -44,7 +44,6 @@ import com.impetus.kundera.utils.ReflectUtils;
 public class CassPropertyAccessorHelper
 {
 
-
     /**
      * Sets an object onto a field.
      * 
