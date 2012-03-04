@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.impetus.kundera.property;
 
+import com.impetus.kundera.property.accessor.*;
+import com.impetus.kundera.property.complex.Composite;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -25,24 +27,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.impetus.kundera.property.accessor.BigDecimalAccessor;
-import com.impetus.kundera.property.accessor.BigIntegerAccessor;
-import com.impetus.kundera.property.accessor.BooleanAccessor;
-import com.impetus.kundera.property.accessor.ByteAccessor;
-import com.impetus.kundera.property.accessor.CalendarAccessor;
-import com.impetus.kundera.property.accessor.CharAccessor;
-import com.impetus.kundera.property.accessor.DateAccessor;
-import com.impetus.kundera.property.accessor.DoubleAccessor;
-import com.impetus.kundera.property.accessor.FloatAccessor;
-import com.impetus.kundera.property.accessor.IntegerAccessor;
-import com.impetus.kundera.property.accessor.LongAccessor;
-import com.impetus.kundera.property.accessor.ObjectAccessor;
-import com.impetus.kundera.property.accessor.SQLDateAccessor;
-import com.impetus.kundera.property.accessor.SQLTimeAccessor;
-import com.impetus.kundera.property.accessor.SQLTimestampAccessor;
-import com.impetus.kundera.property.accessor.ShortAccessor;
-import com.impetus.kundera.property.accessor.StringAccessor;
-import com.impetus.kundera.property.accessor.UuidAccessor;
 import java.util.UUID;
 
 /**
@@ -98,6 +82,9 @@ public class PropertyAccessorFactory
 
         // UUID class Accessor
         map.put(UUID.class, new UuidAccessor());
+
+        // Composite class Accessor
+        map.put(Composite.class, new CompositeAccessor());
 
     }
 
