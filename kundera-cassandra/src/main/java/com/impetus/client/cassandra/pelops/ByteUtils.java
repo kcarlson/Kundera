@@ -17,7 +17,7 @@ package com.impetus.client.cassandra.pelops;
 import com.impetus.kundera.Constants;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.property.PropertyAccessException;
-import com.impetus.kundera.property.complex.CompositeKey;
+import com.impetus.kundera.property.complex.Composite;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -140,20 +140,11 @@ public class ByteUtils
 
     public static Bytes objectToBytes(Object primaryKey, EntityMetadata entityMetadata)
     {
-        if (primaryKey instanceof CompositeKey)
+        if (primaryKey instanceof Composite)
         {
-            try
-            {
-                byte[] bytes = CompositeKey.fromString((String) primaryKey, entityMetadata).toByteArray();
-
-                return Bytes.fromByteArray(bytes);
-            }
-            catch (PropertyAccessException ex)
-            {
-                log.fatal(null, ex);
-                //TODO: Throw something!
-                return null;
-            }
+            ByteBuffer bb = ((Composite)primaryKey).serializeToByteBuffer();
+            return Bytes.fromByteBuffer(bb);
+            
         }
         else
         {
