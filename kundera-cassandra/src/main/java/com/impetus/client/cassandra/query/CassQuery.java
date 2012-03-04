@@ -47,6 +47,7 @@ import com.impetus.kundera.query.QueryImpl;
 import com.impetus.kundera.query.exception.QueryHandlerException;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.accessor.DateAccessor;
+import com.impetus.kundera.property.complex.Composite;
 import java.util.*;
 
 /**
@@ -338,6 +339,11 @@ public class CassQuery extends QueryImpl implements Query
             else if (f.getType().equals(float.class) || f.getType().isAssignableFrom(Float.class))
             {
                 return Bytes.fromFloat(Float.valueOf(value));
+            }
+            else if (f.getType().equals(Composite.class) || f.getType().isAssignableFrom(Composite.class))
+            {
+                Composite composite = Composite.fromString(value);
+                return Bytes.fromByteBuffer(composite.serializeToByteBuffer());
             }
             else if (f.getType().equals(Date.class) || f.getType().isAssignableFrom(Date.class))
             {

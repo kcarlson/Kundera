@@ -300,7 +300,7 @@ public class Composite implements Collection<Object>, Comparable<Composite>
         while (iter.hasNext())
         {
             Object o = iter.next();
-            builder.append(',').append(stringValueOf(o));
+            builder.append(stringValueOf(o));
             if (o instanceof Long)
             {
                 builder.append(";").append(COMPONENT_LONG);
@@ -340,8 +340,10 @@ public class Composite implements Collection<Object>, Comparable<Composite>
             {
                 builder.append(";").append(COMPONENT_BYTES);
             }
+
+            builder.append(",");
         }
-        return builder.toString();
+        return builder.toString().substring(0, builder.length() - 1);
     }
 
     public static Composite fromString(String s)

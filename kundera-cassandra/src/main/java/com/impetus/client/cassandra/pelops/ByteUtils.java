@@ -18,6 +18,7 @@ import com.impetus.kundera.Constants;
 import com.impetus.kundera.metadata.model.EntityMetadata;
 import com.impetus.kundera.property.PropertyAccessException;
 import com.impetus.kundera.property.complex.Composite;
+import com.impetus.kundera.property.complex.MarshalException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.UUID;
@@ -52,6 +53,17 @@ public class ByteUtils
         catch (IllegalArgumentException ex)
         {
             return Bytes.fromByteArray(str.getBytes());
+            /*
+            try
+            {
+                Composite composite = Composite.fromString(str);
+                return Bytes.fromByteBuffer(composite.serializeToByteBuffer());
+            }
+            catch (MarshalException ex2)
+            {
+                return Bytes.fromByteArray(str.getBytes());
+            }
+             */
         }
     }
 
@@ -138,17 +150,4 @@ public class ByteUtils
         }
     }
 
-    public static Bytes objectToBytes(Object primaryKey, EntityMetadata entityMetadata)
-    {
-        if (primaryKey instanceof Composite)
-        {
-            ByteBuffer bb = ((Composite)primaryKey).serializeToByteBuffer();
-            return Bytes.fromByteBuffer(bb);
-            
-        }
-        else
-        {
-            return stringToBytes((String) primaryKey);
-        }
-    }
 }

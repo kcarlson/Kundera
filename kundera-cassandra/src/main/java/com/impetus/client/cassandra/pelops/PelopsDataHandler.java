@@ -854,7 +854,7 @@ public class PelopsDataHandler extends DataHandler
         private List<Column> columns;
 
         /** Id of the row. */
-        private Object id;
+        private String id;
 
         /** list of thrift super columns columns from the row. */
         private List<SuperColumn> superColumns;
@@ -880,7 +880,7 @@ public class PelopsDataHandler extends DataHandler
          * @param superColumns
          *            the super columns
          */
-        public ThriftRow(Object id, String columnFamilyName, List<Column> columns, List<SuperColumn> superColumns)
+        public ThriftRow(String id, String columnFamilyName, List<Column> columns, List<SuperColumn> superColumns)
         {
             this.id = id;
             this.columnFamilyName = columnFamilyName;
@@ -901,7 +901,7 @@ public class PelopsDataHandler extends DataHandler
          *
          * @return the id
          */
-        public Object getId()
+        public String getId()
         {
             return id;
         }
@@ -912,7 +912,7 @@ public class PelopsDataHandler extends DataHandler
          * @param id
          *            the key to set
          */
-        public void setId(Object id)
+        public void setId(String id)
         {
             this.id = id;
         }

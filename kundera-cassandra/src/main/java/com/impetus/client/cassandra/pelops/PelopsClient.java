@@ -424,7 +424,7 @@ public class PelopsClient implements Client
             addColumnsToJoinTable(inverseJoinColumnName, relMetadata, columns, childEntity);
         }
 
-        Bytes keyBytes = ByteUtils.objectToBytes(primaryKey, relMetadata);
+        Bytes keyBytes = ByteUtils.stringToBytes((String) primaryKey);
 
         mutator.writeColumns(joinTableName, keyBytes, Arrays.asList(columns.toArray(new Column[0])));
         mutator.execute(ConsistencyLevel.ONE);
@@ -804,7 +804,7 @@ public class PelopsClient implements Client
         List<SuperColumn> thriftSuperColumns = tf.getSuperColumns();
         if (thriftColumns != null && !thriftColumns.isEmpty())
         {
-            Bytes keyBytes = ByteUtils.objectToBytes(tf.getId(), metadata);
+            Bytes keyBytes = ByteUtils.stringToBytes(tf.getId());
             mutator.writeColumns(metadata.getTableName(), keyBytes, Arrays.asList(tf.getColumns()
                     .toArray(new Column[0])));
         }
@@ -813,10 +813,9 @@ public class PelopsClient implements Client
         {
             for (SuperColumn sc : thriftSuperColumns)
             {
-                Bytes keyBytes = ByteUtils.objectToBytes(tf.getId(), metadata);
-                mutator.writeSubColumns(
-                        metadata.getTableName(), keyBytes, Bytes.fromByteArray(sc.getName()),
-                        sc.getColumns());
+                Bytes keyBytes = ByteUtils.stringToBytes(tf.getId());
+                mutator.writeSubColumns(metadata.getTableName(), keyBytes, Bytes.fromByteArray(sc.getName()), sc
+                        .getColumns());
 
             }
 

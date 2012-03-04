@@ -17,7 +17,7 @@ package com.impetus.kundera.property.complex;
  *
  * @author kcarlson
  */
-class MarshalException extends RuntimeException
+public class MarshalException extends RuntimeException
 {
 
     public MarshalException(String msg)
