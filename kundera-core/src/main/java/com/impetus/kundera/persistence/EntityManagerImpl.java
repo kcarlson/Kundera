@@ -522,7 +522,7 @@ public class EntityManagerImpl implements EntityManager
      *
      * @return the persistence delegator
      */
-    private PersistenceDelegator getPersistenceDelegator()
+    public PersistenceDelegator getPersistenceDelegator()
     {
         return persistenceDelegator;
     }
