@@ -109,7 +109,7 @@ public class Composite implements Serializable
         String[] compositeParts = s.split(":");
         Class[] compositeTypes = getCompositeFieldTypes(field);
 
-        if (compositeParts.length != compositeTypes.length)
+        if (compositeTypes == null || compositeParts.length != compositeTypes.length)
         {
             throw new MarshalException("Supplied byte array did not parse correctly "
                     + "or composite field not annotated correctly.");
@@ -349,7 +349,7 @@ public class Composite implements Serializable
 
         Class[] compositeFieldTypes = getCompositeFieldTypes(field);
 
-        if (ckeyList.size() != compositeFieldTypes.length)
+        if (compositeFieldTypes == null || ckeyList.size() != compositeFieldTypes.length)
         {
             throw new MarshalException("Supplied byte array did not parse correctly "
                     + "or composite field not annotated correctly.");
@@ -410,7 +410,7 @@ public class Composite implements Serializable
     {
         com.impetus.client.cassandra.pelops.composite.CompositeType ct = field
                 .getAnnotation(com.impetus.client.cassandra.pelops.composite.CompositeType.class);
-        return ct.parts();
+        return ct == null ? null : ct.parts();
     }
 
     public Iterator<Object> iterator()

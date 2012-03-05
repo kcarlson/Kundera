@@ -196,10 +196,19 @@ public class CassPropertyAccessorHelper
     {
         try
         {
-            PropertyAccessor<?> accessor = PropertyAccessorFactory.getPropertyAccessor(metadata.getIdColumn()
-                    .getField());
-            Object obj = accessor.fromString(rowKey);
-
+            Object obj;
+            Field field = metadata.getIdColumn().getField();
+            if (field.getType().equals(Composite.class))
+            {
+                CompositeAccessor accessor = new CompositeAccessor();
+                obj = accessor.fromString(rowKey, field);
+            }
+            else
+            {
+                PropertyAccessor<?> accessor = PropertyAccessorFactory.getPropertyAccessor(metadata.getIdColumn()
+                        .getField());
+                obj = accessor.fromString(rowKey);
+            }
             metadata.getWriteIdentifierMethod().invoke(entity, obj);
         }
         catch (IllegalArgumentException iarg)

@@ -263,7 +263,7 @@ public class EntityManagerFactoryImpl implements EntityManagerFactory
      *
      * @return the persistence units
      */
-    private String[] getPersistenceUnits()
+    public String[] getPersistenceUnits()
     {
         return persistenceUnits;
     }
