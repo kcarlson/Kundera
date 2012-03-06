@@ -599,9 +599,11 @@ public class PersistenceDelegator
         }
         catch (Exception exp)
         {
-            exp.printStackTrace();
+            if (log.isDebugEnabled())
+            {
+                log.debug(e);
+            }
             throw new PersistenceException(exp);
-
         }
     }
 

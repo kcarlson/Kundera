@@ -44,12 +44,15 @@ public class ShortAccessor implements PropertyAccessor<Short>
     @Override
     public byte[] toBytes(Object object) throws PropertyAccessException
     {
-        if (object != null)
+        try
         {
             Short s = (Short) object;
             return new byte[] { (byte) ((s >> 8) & 0xff), (byte) ((s >> 0) & 0xff), };
         }
-        return null;
+        catch (Exception e)
+        {
+            throw new PropertyAccessException(e.getMessage());
+        }
     }
 
     /* (non-Javadoc)

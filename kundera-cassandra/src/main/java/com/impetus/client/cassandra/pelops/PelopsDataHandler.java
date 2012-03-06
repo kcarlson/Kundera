@@ -637,9 +637,16 @@ public class PelopsDataHandler extends DataHandler
                     byte[] value = CassPropertyAccessorHelper.get(e, field);
                     Column col = new Column();
                     col.setName(PropertyAccessorFactory.STRING.toBytes(name));
-                    col.setValue(value);
-                    col.setTimestamp(timestamp);
-                    columns.add(col);
+                    if (value != null)
+                    {
+                        col.setValue(value);
+                        col.setTimestamp(timestamp);
+                        columns.add(col);
+                    }
+                    else
+                    {
+                        log.warn("Attempting to set null value for column " + name);
+                    }
                 }
                 catch (PropertyAccessException exp)
                 {
