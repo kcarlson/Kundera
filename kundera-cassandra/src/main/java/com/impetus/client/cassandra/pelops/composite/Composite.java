@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.scale7.cassandra.pelops.Bytes;
 import org.scale7.cassandra.pelops.types.CompositeType;
 
-public class Composite implements Serializable
+public class Composite implements Comparable<Composite>, Serializable
 {
     static final Logger logger = Logger.getLogger(Composite.class.getName());
 
@@ -349,7 +349,17 @@ public class Composite implements Serializable
 
     public static Composite parse(byte[] bytes, Field field)
     {
-        List<byte[]> ckeyList = CompositeType.parse(bytes);
+        List<byte[]> ckeyList = null;
+
+        try
+        {
+            ckeyList = CompositeType.parse(bytes);
+        }
+        catch (IllegalArgumentException ex)
+        {
+            throw new MarshalException(ex.getMessage());
+        }
+
         Composite composite = new Composite();
 
         Class[] compositeFieldTypes = getCompositeFieldTypes(field);
@@ -426,5 +436,102 @@ public class Composite implements Serializable
     public List<Object> parts()
     {
         return parts;
+    }
+
+    /**
+     * Compares composites one part at a time. Currently only composites composed
+     * of Numbers, UUIDs, Strings, and any class implementing the Comparable
+     * interface.
+     * @param t
+     * @return 
+     */
+    @Override
+    public int compareTo(Composite t)
+    {
+        if (parts.size() < t.parts.size())
+        {
+            return -1;
+        }
+        else if (parts.size() > t.parts.size())
+        {
+            return 0;
+        }
+
+        int diff = 0;
+
+        for (int i = 0; i < parts.size(); i++)
+        {
+            Object a = parts.get(i);
+            Object b = t.parts.get(i);
+
+            if (a.getClass().equals(b.getClass()))
+            {
+                if (a.getClass().isAssignableFrom(Number.class))
+                {
+                    diff += ((Number) a).doubleValue() - ((Number) b).doubleValue();
+                }
+                else if (a instanceof String)
+                {
+                    diff += ((String) a).compareTo((String) b);
+                }
+                else if (a instanceof UUID)
+                {
+                    diff += compareUuids((UUID) a, (UUID) b);
+                }
+                if (a.getClass().isAssignableFrom(Comparable.class))
+                {
+                    diff += ((Comparable) a).compareTo((Comparable) b);
+                }
+            }
+            else
+            {
+                //?
+            }
+        }
+
+        return diff;
+    }
+
+    /**
+     * Compares uuids correctly, unlike java implementation of UUID.compare. NOTE:
+     * This assumes UUIDs are time based version 1.
+     * @param uuid1
+     * @param uuid2
+     * @return 
+     */
+    private int compareUuids(UUID uuid1, UUID uuid2)
+    {
+        int diff = compareULongs(uuid1.timestamp(), uuid2.timestamp());
+        if (diff == 0)
+        {
+            // or if that won't work, by other bits lexically
+            diff = compareULongs(uuid1.getLeastSignificantBits(), uuid2.getLeastSignificantBits());
+        }
+
+        return diff;
+    }
+
+    private static int compareULongs(long l1, long l2)
+    {
+        int diff = compareUInts((int) (l1 >> 32), (int) (l2 >> 32));
+        if (diff == 0)
+        {
+            diff = compareUInts((int) l1, (int) l2);
+        }
+        return diff;
+    }
+
+    private static int compareUInts(int i1, int i2)
+    {
+        /*
+         * bit messier due to java's insistence on signed values: if both have
+         * same sign, normal comparison (by subtraction) works fine; but if
+         * signs don't agree need to resolve differently
+         */
+        if (i1 < 0)
+        {
+            return (i2 < 0) ? (i1 - i2) : 1;
+        }
+        return (i2 < 0) ? -1 : (i1 - i2);
     }
 }
