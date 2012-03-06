@@ -327,6 +327,11 @@ public class Composite implements Serializable
         return this;
     }
 
+    public Bytes build()
+    {
+        return builder.build();
+    }
+
     public byte[] serialize()
     {
         return builder.build().toByteArray();

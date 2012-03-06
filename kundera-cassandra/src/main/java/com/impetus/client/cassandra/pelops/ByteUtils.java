@@ -78,7 +78,7 @@ public class ByteUtils
             // is wrong.
             if (bytes.length() != 16)
             {
-                return Bytes.toUTF8(bytes.toByteArray());
+                throw new IllegalStateException();
             }
             UUID uuid = bytes.toUuid();
             return uuid.toString();

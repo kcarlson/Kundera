@@ -294,7 +294,7 @@ public class PelopsDataHandler extends DataHandler
             {
                 entity = clazz.newInstance();
                 // Set row-key
-                CassPropertyAccessorHelper.setId(entity, m, thriftRow.getId().toString());
+                CassPropertyAccessorHelper.setId(entity, m, thriftRow.getId());
             }
 
             String thriftColumnName = PropertyAccessorFactory.STRING.fromBytes(c.getName());

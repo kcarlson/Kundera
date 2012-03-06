@@ -45,6 +45,35 @@ public class CassPropertyAccessorHelper
 {
 
     /**
+     * Sets a byte-array onto a field.
+     * 
+     * @param target
+     *            the target
+     * @param field
+     *            the field
+     * @param bytes
+     *            the bytes
+     * 
+     * @throws PropertyAccessException
+     *             the property access exception
+     */
+    public static void set(Object target, Field field, byte[] bytes) throws PropertyAccessException
+    {
+        Object value;
+        if (field.getType().equals(Composite.class))
+        {
+            CompositeAccessor accessor = new CompositeAccessor();
+            value = accessor.fromBytes(bytes, field);
+        }
+        else
+        {
+            PropertyAccessor<?> accessor = PropertyAccessorFactory.getPropertyAccessor(field);
+            value = accessor.fromBytes(bytes);
+        }
+        set(target, field, value);
+    }
+
+    /**
      * Sets an object onto a field.
      * 
      * @param target
@@ -150,8 +179,18 @@ public class CassPropertyAccessorHelper
      */
     public static byte[] get(Object from, Field field) throws PropertyAccessException
     {
-        PropertyAccessor<?> accessor = PropertyAccessorFactory.getPropertyAccessor(field);
-        return accessor.toBytes(getObject(from, field));
+        byte[] value;
+        if (field.getType().equals(Composite.class))
+        {
+            CompositeAccessor accessor = new CompositeAccessor();
+            value = accessor.toBytes(getObject(from, field));
+        }
+        else
+        {
+            PropertyAccessor<?> accessor = PropertyAccessorFactory.getPropertyAccessor(field);
+            value = accessor.toBytes(getObject(from, field));
+        }
+        return value;
     }
 
     /**
